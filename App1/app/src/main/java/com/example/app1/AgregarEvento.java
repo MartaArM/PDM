@@ -63,16 +63,17 @@ public class AgregarEvento extends AppCompatActivity {
 
         long tiempo_inicio = convertir_fecha(fecha_inicio);
         long tiempo_fin = convertir_fecha(fecha_fin);
-        /*
+
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra(CalendarContract.Events.TITLE, titulo);
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                startDateMillis);
+                tiempo_inicio);
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                endDateMillis);
-        intent.putExtra(Events.ALL_DAY, false);// periodicity
-        intent.putExtra(Events.DESCRIPTION,strDescription));*/
+                tiempo_fin);
+        intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
+
+        finish();
     }
 
     private long convertir_fecha(String fecha) {
