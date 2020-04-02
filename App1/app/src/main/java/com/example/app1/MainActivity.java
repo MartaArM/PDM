@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         SimpleDateFormat df = new SimpleDateFormat("dd");
         dia = df.format(c);
-        df = new SimpleDateFormat("mm");
+        df = new SimpleDateFormat("MM");
         mes = df.format(c);
         df = new SimpleDateFormat("YYYY");
         anio = df.format(c);
