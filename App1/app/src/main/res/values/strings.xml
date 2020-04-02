@@ -2,6 +2,7 @@
     <string name="app_name">Calendario</string>
     <string name="agregar_evento">Agregar evento</string>
     <string name="titulo">Título</string>
-    <string name="hora">Hora</string>
+    <string name="hora_inicio">Hora de inicio</string>
+    <string name="hora_fin">Hora de fin</string>
     <string name="guardar">Guardar</string>
 </resources>

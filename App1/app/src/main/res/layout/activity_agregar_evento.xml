@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fecha_evento" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/ettitulo"
         android:layout_width="359dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
@@ -56,13 +56,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="28dp"
-        android:text="@string/hora"
+        android:text="@string/hora_inicio"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/ettitulo" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/ethora_inicio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -77,8 +77,30 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="292dp"
         android:layout_marginTop="363dp"
+        android:onClick="agregarEvento"
         android:text="@string/guardar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/ettitulo" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/hora_fin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ethora_inicio" />
+
+    <EditText
+        android:id="@+id/ethora_fin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

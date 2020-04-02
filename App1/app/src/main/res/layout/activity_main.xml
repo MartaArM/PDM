@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="336dp"
         android:backgroundTint="@android:color/white"
-        android:onClick="sendMessage"
+        android:onClick="enviarFecha"
         android:tint="#8A8A8A"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
@@ -29,10 +29,23 @@
 
     <ListView
         android:id="@+id/lvEventos"
-        android:layout_width="354dp"
-        android:layout_height="267dp"
+        android:layout_width="350dp"
+        android:layout_height="179dp"
         android:layout_marginStart="31dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="178dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="118dp"
+        android:layout_marginEnd="119dp"
+        android:backgroundTint="#808080"
+        android:tint="#272727"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lvEventos"
+        app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void sendMessage(View view) {
+    public void enviarFecha(View view) {
         array_fecha = new ArrayList<String>();
         array_fecha.add(dia);
         array_fecha.add(mes);
