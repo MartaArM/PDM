@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">App1</string>
     <string name="agregar_evento">Agregar evento</string>
+    <string name="titulo">Título</string>
+    <string name="hora">Hora</string>
+    <string name="guardar">Guardar</string>
 </resources>
