@@ -3,12 +3,16 @@ package com.example.app1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.json.JSONArray;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +24,8 @@ public class AgregarEvento extends AppCompatActivity {
     public Intent intent;
     private TextView textView;
     private EditText et_titulo, et_hora_inicio, et_hora_fin;
-
+    public ArrayList<String> fechas_prueba = new ArrayList<String>();
+    private String fecha_fin = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +34,15 @@ public class AgregarEvento extends AppCompatActivity {
 
         fecha = new ArrayList<String>();
 
+
         intent = getIntent();
 
         // Pongo el texto en el nuevo textview
         textView = findViewById(R.id.fecha_evento);
         textView.setText(crear_fecha());
+
+        fecha_fin = textView.getText().toString();
+        fechas_prueba.add(fecha_fin);
     }
 
     private String crear_fecha(){
@@ -49,31 +58,18 @@ public class AgregarEvento extends AppCompatActivity {
 
 
     public void agregarEvento(View view) throws ParseException {
-        et_titulo = findViewById(R.id.ettitulo);
-        String titulo = et_titulo.getText().toString();
-
-        et_hora_inicio = findViewById(R.id.ethora_inicio);
-        String hora_inicio = et_hora_inicio.getText().toString();
-
-        et_hora_fin = findViewById(R.id.ethora_fin);
-        String hora_fin = et_hora_fin.getText().toString();
-
-        String fecha_inicio = crear_fecha() + " " + hora_inicio;
-        String fecha_fin = crear_fecha() + " " + hora_fin;
-
-        long tiempo_inicio = convertir_fecha(fecha_inicio);
-        long tiempo_fin = convertir_fecha(fecha_fin);
-
-        Intent intent = new Intent(Intent.ACTION_EDIT);
-        intent.setType("vnd.android.cursor.item/event");
-        intent.putExtra(CalendarContract.Events.TITLE, titulo);
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                tiempo_inicio);
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                tiempo_fin);
-        intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
-
-        finish();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        JSONArray a = new JSONArray();
+        for (int i = 0; i < fechas_prueba.size(); i++) {
+            a.put(fechas_prueba.get(i));
+        }
+        if (!fechas_prueba.isEmpty()) {
+            editor.putString("fechas", a.toString());
+        } else {
+            editor.putString("fechas", null);
+        }
+        editor.commit();
     }
 
     private long convertir_fecha(String fecha) {
@@ -88,4 +84,7 @@ public class AgregarEvento extends AppCompatActivity {
         }
         return timeInMilliseconds;
     }
+     public void agregar(ArrayList<String> values){
+
+     }
 }
