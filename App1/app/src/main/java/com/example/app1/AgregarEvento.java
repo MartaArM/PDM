@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class AgregarEvento extends AppCompatActivity {
@@ -26,6 +27,10 @@ public class AgregarEvento extends AppCompatActivity {
     private EditText et_titulo, et_hora_inicio, et_hora_fin;
     public ArrayList<String> fechas_prueba = new ArrayList<String>();
     private String fecha_fin = "";
+
+
+// retrieve preference
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,21 +75,8 @@ public class AgregarEvento extends AppCompatActivity {
             editor.putString("fechas", null);
         }
         editor.commit();
+
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
-
-    private long convertir_fecha(String fecha) {
-        long timeInMilliseconds = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYY HH:mm");
-        try {
-            Date mDate = sdf.parse(fecha);
-            timeInMilliseconds = mDate.getTime();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return timeInMilliseconds;
-    }
-     public void agregar(ArrayList<String> values){
-
-     }
 }

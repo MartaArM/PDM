@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView lv;
     private ArrayList<String> array_fecha;
     private static final int MY_PERMISSION = 0;
+    ArrayList<String> list = new ArrayList<String>();
+
 
     public static final String[] EVENT_PROJECTION = new String[]{
             CalendarContract.Calendars._ID,                           // 0
@@ -83,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+// retrieve preference
         your_array_list = leerEventos();
+        System.out.println("SIZE: " + your_array_list.size());
 
         // This is the array adapter, it takes the context of the activity as a
         // first parameter, the type of list view as a second parameter and your
