@@ -26,6 +26,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,22 +42,9 @@ public class MainActivity extends AppCompatActivity {
     public String mes, anio, dia;
     private ListView lv;
     private ArrayList<String> array_fecha;
-    private static final int MY_PERMISSION = 0;
     ArrayList<String> list = new ArrayList<String>();
-
-
-    public static final String[] EVENT_PROJECTION = new String[]{
-            CalendarContract.Calendars._ID,                           // 0
-            CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
-            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
-            CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
-    };
-
-    // The indices for the projection array above.
-    public static final int PROJECTION_ID_INDEX = 0;
-    public static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
-    public static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
-    public static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
+    List<String> your_array_list;
+    ArrayAdapter<String> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,38 +54,50 @@ public class MainActivity extends AppCompatActivity {
         calendario = (CalendarView) findViewById(R.id.calendarView);
         lv = (ListView) findViewById(R.id.lvEventos);
 
-        List<String> your_array_list = new ArrayList<String>();
+        your_array_list = new ArrayList<String>();
 
         /*your_array_list.add("foo");
         your_array_list.add("bar");*/
-
-
-
-
         //Cojo la fecha actual por si no cambio de día
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, your_array_list);
+        lv.setAdapter(arrayAdapter);
         fecha_actual();
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 anio = Integer.toString(year);
-                mes = Integer.toString(month + 1);
-                dia = Integer.toString(dayOfMonth);
+                SimpleDateFormat dmd = new SimpleDateFormat("MM");
+                Date m = null;
+                try {
+                    m = dmd.parse(Integer.toString(month));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat dms = new SimpleDateFormat("MM");
+                mes = dms.format(m);
+                SimpleDateFormat ddd = new SimpleDateFormat("dd");
+                Date d = null;
+                try {
+                     d = ddd.parse(Integer.toString(dayOfMonth));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat dds = new SimpleDateFormat("dd");
+                dia = dds.format(d);
+
+                your_array_list.clear(); // limpiar array
+                your_array_list.addAll(leerEventos()); //leer eventos de esta fecha
+
+                arrayAdapter.notifyDataSetChanged(); // cambiar la lista
+
             }
         });
 
-// retrieve preference
-        your_array_list = leerEventos();
-        System.out.println("SIZE: " + your_array_list.size());
+    }
 
-        // This is the array adapter, it takes the context of the activity as a
-        // first parameter, the type of list view as a second parameter and your
-        // array as a third parameter.
-        ArrayAdapter<String>
-                arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                your_array_list);
-        lv.setAdapter(arrayAdapter);
+    private String dameFecha() {
+        String fecha = dia + "/" + mes + "/" + anio;
+        return fecha;
     }
 
     public void enviarFecha(View view) {
@@ -127,18 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> leerEventos() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String json = prefs.getString("fechas", null);
+        String json = prefs.getString(dameFecha(), null);
         ArrayList<String> urls = new ArrayList<String>();
         if (json != null) {
-            try {
-                JSONArray a = new JSONArray(json);
-                for (int i = 0; i < a.length(); i++) {
-                    String url = a.optString(i);
-                    urls.add(url);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            urls.add(json);
         }
         return urls;
     }

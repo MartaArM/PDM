@@ -65,7 +65,8 @@ public class AgregarEvento extends AppCompatActivity {
     public void agregarEvento(View view) throws ParseException {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
-        JSONArray a = new JSONArray();
+        editor.putString(fecha_fin, fecha_fin);
+        /*JSONArray a = new JSONArray();
         for (int i = 0; i < fechas_prueba.size(); i++) {
             a.put(fechas_prueba.get(i));
         }
@@ -74,6 +75,7 @@ public class AgregarEvento extends AppCompatActivity {
         } else {
             editor.putString("fechas", null);
         }
+        */
         editor.commit();
 
         Intent intent = new Intent(this,MainActivity.class);
