@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +29,7 @@ public class AgregarEvento extends AppCompatActivity {
     private EditText et_titulo, et_hora_inicio, et_hora_fin;
     public ArrayList<String> fechas_prueba = new ArrayList<String>();
     private String fecha_fin = "";
+    public int n = 0;
 
 
 // retrieve preference
@@ -48,6 +51,8 @@ public class AgregarEvento extends AppCompatActivity {
 
         fecha_fin = textView.getText().toString();
         fechas_prueba.add(fecha_fin);
+
+
     }
 
     private String crear_fecha(){
@@ -65,17 +70,23 @@ public class AgregarEvento extends AppCompatActivity {
     public void agregarEvento(View view) throws ParseException {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(fecha_fin, fecha_fin);
-        /*JSONArray a = new JSONArray();
-        for (int i = 0; i < fechas_prueba.size(); i++) {
-            a.put(fechas_prueba.get(i));
+
+        et_titulo = findViewById(R.id.ettitulo);
+        et_hora_inicio = findViewById(R.id.ethora_inicio);
+        et_hora_fin = findViewById(R.id.ethora_fin);
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("titulo", et_titulo.getText().toString());
+            obj.put("hora_inicio", et_hora_inicio.getText().toString());
+            obj.put("hora_fin", et_hora_fin.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        if (!fechas_prueba.isEmpty()) {
-            editor.putString("fechas", a.toString());
-        } else {
-            editor.putString("fechas", null);
-        }
-        */
+
+        //editor.putString(fecha_fin + "_" + et_hora_inicio.getText().toString(), obj.toString());
+        editor.putString(fecha_fin + n, obj.toString());
+        n = n+1;
         editor.commit();
 
         Intent intent = new Intent(this,MainActivity.class);

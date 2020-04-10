@@ -37,12 +37,10 @@ import java.util.List;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String fecha = "";
     private CalendarView calendario;
     public String mes, anio, dia;
     private ListView lv;
     private ArrayList<String> array_fecha;
-    ArrayList<String> list = new ArrayList<String>();
     List<String> your_array_list;
     ArrayAdapter<String> arrayAdapter;
 
@@ -51,21 +49,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calendario = (CalendarView) findViewById(R.id.calendarView);
-        lv = (ListView) findViewById(R.id.lvEventos);
+        calendario = findViewById(R.id.calendarView);
+        lv = findViewById(R.id.lvEventos);
 
         your_array_list = new ArrayList<String>();
 
-        /*your_array_list.add("foo");
-        your_array_list.add("bar");*/
-        //Cojo la fecha actual por si no cambio de día
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, your_array_list);
         lv.setAdapter(arrayAdapter);
-        fecha_actual();
+
+        fecha_actual(); // Fecha actual por si no cambio de dia
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 anio = Integer.toString(year);
+                // Corregir formato del mes y día
                 SimpleDateFormat dmd = new SimpleDateFormat("MM");
                 Date m = null;
                 try {
@@ -107,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         array_fecha.add(anio);
         // El segundo parámetro es la nueva actividad que va a comenzar
         Intent intent = new Intent(this, AgregarEvento.class);
-        //intent.putExtra(ANIO, anio);
         intent.putStringArrayListExtra("fecha", array_fecha);
         startActivity(intent);
     }
@@ -127,11 +123,15 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> leerEventos() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String json = prefs.getString(dameFecha(), null);
         ArrayList<String> urls = new ArrayList<String>();
-        if (json != null) {
-            urls.add(json);
+        for (int i =0; i<50; i++) {
+            String json = prefs.getString(dameFecha(), null);
+            if (json != null) {
+                urls.add(json);
+            }
         }
+
+
         return urls;
     }
 }
