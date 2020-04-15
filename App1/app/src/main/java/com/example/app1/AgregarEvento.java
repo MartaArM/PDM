@@ -78,7 +78,7 @@ public class AgregarEvento extends AppCompatActivity {
 
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
-        Evento e = new Evento(fecha_fin, et_titulo.toString(), et_hora_inicio.toString(), et_hora_fin.toString());
+        Evento e = new Evento(fecha_fin, et_titulo.getText().toString(), et_hora_inicio.getText().toString(), et_hora_fin.getText().toString());
 
         db.eventoDao().aniadir(e);
 

@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(arrayAdapter);
 
         fecha_actual(); // Fecha actual por si no cambio de dia
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "database-name").allowMainThreadQueries().build();
+
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -86,18 +89,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 SimpleDateFormat dds = new SimpleDateFormat("dd");
                 dia = dds.format(d);
+                String fecha_aux = dia + "/" + mes + "/" + anio;
 
+                List<Evento> events = db.eventoDao().getEventoFecha(fecha_aux);
                 your_array_list.clear(); // limpiar array
-                your_array_list.addAll(leerEventos()); //leer eventos de esta fecha
+                for(Evento e : events) {
+                    String ev = e.getHora_inicio() + "-" + e.getHora_fin() + "  " + e.getTitulo();
+                    your_array_list.add(ev);
+                }
 
                 arrayAdapter.notifyDataSetChanged(); // cambiar la lista
 
             }
         });
-         db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").allowMainThreadQueries().build();
-         List<Evento> events = db.eventoDao().getAllEventos();
-
 
 
     }
