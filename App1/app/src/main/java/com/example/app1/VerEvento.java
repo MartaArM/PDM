@@ -59,6 +59,8 @@ public class VerEvento extends AppCompatActivity {
         startActivity(intent);
     }
     public void editarEvento(View view) {
-        
+        Intent intent = new Intent(this, EditarEvento.class);
+        intent.putStringArrayListExtra("valores", valores);
+        startActivity(intent);
     }
 }
