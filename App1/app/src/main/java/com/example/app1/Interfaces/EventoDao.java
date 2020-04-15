@@ -32,7 +32,7 @@ public interface EventoDao {
     //actualizar
     @Update
     int updateEntidad(Evento obj);
-    
+
     //insertar 2
     @Insert
     long insert(Evento usuarios);

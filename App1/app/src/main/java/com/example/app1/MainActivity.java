@@ -3,6 +3,7 @@ package com.example.app1;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.room.Room;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -22,6 +23,9 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.app1.Database.AppDatabase;
+import com.example.app1.Entidad.Evento;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> array_fecha;
     List<String> your_array_list;
     ArrayAdapter<String> arrayAdapter;
+    public AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        
+         db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "database-name").allowMainThreadQueries().build();
+
+         Evento e = new Evento("20/10/2020", "titulo", "20:00", "20:30");
+         db.eventoDao().aniadir(e);
 
     }
 

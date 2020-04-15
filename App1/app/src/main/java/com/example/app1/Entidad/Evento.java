@@ -54,19 +54,19 @@ public class Evento {
         this.titulo = titulo;
     }
 
-    public String getHoraInicio() {
+    public String getHora_inicio() {
         return hora_inicio;
     }
 
-    public void setHoraInicio(String hora_inicio) {
+    public void setHora_inicio(String hora_inicio) {
         this.hora_inicio = hora_inicio;
     }
 
-    public String getHoraFin() {
+    public String getHora_fin() {
         return hora_fin;
     }
 
-    public void setHoraFin(String hora_fin) {
+    public void setHora_fin(String hora_fin) {
         this.hora_fin = hora_fin;
     }
 
@@ -74,8 +74,7 @@ public class Evento {
     public Evento() {
     }
 
-    public Evento(long id, String fecha, String titulo, String hora_inicio, String hora_fin) {
-        this.id = id;
+    public Evento( String fecha, String titulo, String hora_inicio, String hora_fin) {
         this.fecha = fecha;
         this.titulo = titulo;
         this.hora_inicio = hora_inicio;
