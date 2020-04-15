@@ -32,6 +32,7 @@ import com.example.app1.Entidad.Evento;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  Object item = parent.getItemAtPosition(position);
                  //System.out.println("ITEM: "+ item.toString());
+                verEvento(item);
             }
         });
 
@@ -130,6 +132,22 @@ public class MainActivity extends AppCompatActivity {
         intent.putStringArrayListExtra("fecha", array_fecha);
         startActivity(intent);
     }
+    // Abre la actividad para ver el evento, para poder eliminarlo o editarlo
+    public void verEvento(Object item) {
+        String evento = item.toString();
+        String hora_inicio = evento.substring(0, 5);
+        String hora_fin = evento.substring(6, 11);
+        String titulo = evento.substring(13);
+        ArrayList valores = new ArrayList<String>();
+        valores.add(dameFecha());
+        valores.add(hora_inicio);
+        valores.add(hora_fin);
+        valores.add(titulo);
+
+        Intent intent = new Intent(this, VerEvento.class);
+        intent.putStringArrayListExtra("valores", valores);
+        startActivity(intent);
+    }
 
     public void fecha_actual() {
         Date c = Calendar.getInstance().getTime();
@@ -144,17 +162,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<String> leerEventos() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        ArrayList<String> urls = new ArrayList<String>();
-        for (int i =0; i<50; i++) {
-            String json = prefs.getString(dameFecha(), null);
-            if (json != null) {
-                urls.add(json);
-            }
-        }
-
-
-        return urls;
-    }
 }

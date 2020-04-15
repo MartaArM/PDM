@@ -30,8 +30,8 @@ public interface EventoDao {
     int deleteById(long ide);
 
     //eliminar por fecha y hora
-    @Query("DELETE FROM " + Evento.TABLE_NAME + " WHERE hora_inicio" + " = :hora" + " AND fecha"+ " = :fecha")
-    int deleteByHora(String hora, String fecha);
+    @Query("DELETE FROM " + Evento.TABLE_NAME + " WHERE fecha" + " = :fecha" + " AND hora_inicio"+ " = :hora")
+    int deleteByHora(String fecha, String hora);
 
     //eliminar todos
     @Query("DELETE FROM " + Evento.TABLE_NAME)
