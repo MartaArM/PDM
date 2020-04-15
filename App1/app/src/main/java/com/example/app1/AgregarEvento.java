@@ -1,6 +1,7 @@
 package com.example.app1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,9 @@ import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.app1.Database.AppDatabase;
+import com.example.app1.Entidad.Evento;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +33,7 @@ public class AgregarEvento extends AppCompatActivity {
     private EditText et_titulo, et_hora_inicio, et_hora_fin;
     public ArrayList<String> fechas_prueba = new ArrayList<String>();
     private String fecha_fin = "";
-    public int n = 0;
+    public AppDatabase db;
 
 
 // retrieve preference
@@ -50,7 +54,6 @@ public class AgregarEvento extends AppCompatActivity {
         textView.setText(crear_fecha());
 
         fecha_fin = textView.getText().toString();
-        fechas_prueba.add(fecha_fin);
 
 
     }
@@ -68,26 +71,16 @@ public class AgregarEvento extends AppCompatActivity {
 
 
     public void agregarEvento(View view) throws ParseException {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = prefs.edit();
 
         et_titulo = findViewById(R.id.ettitulo);
         et_hora_inicio = findViewById(R.id.ethora_inicio);
         et_hora_fin = findViewById(R.id.ethora_fin);
 
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("titulo", et_titulo.getText().toString());
-            obj.put("hora_inicio", et_hora_inicio.getText().toString());
-            obj.put("hora_fin", et_hora_fin.getText().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "database-name").allowMainThreadQueries().build();
+        Evento e = new Evento(fecha_fin, et_titulo.toString(), et_hora_inicio.toString(), et_hora_fin.toString());
 
-        //editor.putString(fecha_fin + "_" + et_hora_inicio.getText().toString(), obj.toString());
-        editor.putString(fecha_fin + n, obj.toString());
-        n = n+1;
-        editor.commit();
+        db.eventoDao().aniadir(e);
 
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);

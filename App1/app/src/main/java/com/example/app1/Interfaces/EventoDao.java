@@ -17,6 +17,9 @@ public interface EventoDao {
     @Query("SELECT * FROM "+Evento.TABLE_NAME)
     List<Evento> getAllEventos();
 
+    // seleccionar por fecha
+    @Query("SELECT * FROM "+Evento.TABLE_NAME+" WHERE fecha" +" = :fecha")
+    List<Evento> getEventoFecha(String fecha);
 
     //insertar
     @Insert

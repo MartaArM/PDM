@@ -94,13 +94,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        
          db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
+         List<Evento> events = db.eventoDao().getAllEventos();
 
-         Evento e = new Evento("20/10/2020", "titulo", "20:00", "20:30");
-         db.eventoDao().aniadir(e);
+
 
     }
 
