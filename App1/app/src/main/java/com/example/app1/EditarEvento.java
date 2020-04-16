@@ -72,9 +72,9 @@ public class EditarEvento extends AppCompatActivity {
         valores_aux.add(hora_ini);
         valores_aux.add(hora_fin);
         valores_aux.add(titulo);
-        Intent intent = new Intent(EditarEvento.this, VerEvento.class);
 
         //Actualizar la vista
+        Intent intent = new Intent(EditarEvento.this, VerEvento.class);
         intent.putStringArrayListExtra("valores", valores_aux);
         finish();
         startActivity(intent);

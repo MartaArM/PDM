@@ -3,6 +3,7 @@ package com.example.app1;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
 import android.Manifest;
@@ -15,14 +16,21 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
+import android.provider.Settings;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,35 +48,43 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
     private CalendarView calendario;
-    public String mes, anio, dia;
     private ListView lv;
+    private ImageButton button_bot;
+    public String mes, anio, dia;
     private ArrayList<String> array_fecha;
     List<String> your_array_list;
     ArrayAdapter<String> arrayAdapter;
     public AppDatabase db;
+    SpeechRecognizer mySpeech;
+    Intent speechintent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Comprobamos permisos para escuchar
+        comprobarPermisos();
+
         calendario = findViewById(R.id.calendarView);
         lv = findViewById(R.id.lvEventos);
+        button_bot = findViewById(R.id.ibbot);
 
         your_array_list = new ArrayList<String>();
 
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, your_array_list);
-        lv.setAdapter(arrayAdapter);
+        lv.setAdapter(arrayAdapter); // list view donde se van a ver los eventos
 
         fecha_actual(); // Fecha actual por si no cambio de dia
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
-
+        // Método de cambio de fecha en calendarview
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -105,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        // En que evento del dia marcado estoy señalando
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -115,6 +131,75 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mySpeech = SpeechRecognizer.createSpeechRecognizer(this);
+        speechintent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        speechintent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechintent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        mySpeech.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle params) {
+
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+
+            }
+
+            @Override
+            public void onRmsChanged(float rmsdB) {
+
+            }
+
+            @Override
+            public void onBufferReceived(byte[] buffer) {
+
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+
+            }
+
+            @Override
+            public void onError(int error) {
+
+            }
+
+            @Override
+            public void onResults(Bundle results) {
+                ArrayList<String> matchs = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                if (matchs != null)
+                    System.out.println(matchs.get(0));
+            }
+
+            @Override
+            public void onPartialResults(Bundle partialResults) {
+
+            }
+
+            @Override
+            public void onEvent(int eventType, Bundle params) {
+
+            }
+        });
+        button_bot.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN: // Cuando aprieto el botón
+                        mySpeech.startListening(speechintent);
+                        break;
+                    case MotionEvent.ACTION_UP: //Cuando lo suelto
+                        mySpeech.stopListening();
+                        System.out.println("SOLTADO");
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private String dameFecha() {
@@ -158,8 +243,15 @@ public class MainActivity extends AppCompatActivity {
         mes = df.format(c);
         df = new SimpleDateFormat("YYYY");
         anio = df.format(c);
-
-
     }
 
+    private void comprobarPermisos() {
+        if (!(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
+                PackageManager.PERMISSION_GRANTED)) {
+            Intent intent_perm = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package: "+getPackageName()));
+            startActivity(intent_perm);
+            finish();
+        }
+    }
 }
