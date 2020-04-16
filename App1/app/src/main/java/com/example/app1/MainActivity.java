@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     SpeechRecognizer mySpeech;
     Intent speechintent;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,9 +172,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResults(Bundle results) {
+                System.out.println("ENTRA");
                 ArrayList<String> matchs = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (matchs != null)
-                    System.out.println(matchs.get(0));
+                    prueba.setText(matchs.get(0));
+
             }
 
             @Override
@@ -194,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_UP: //Cuando lo suelto
                         mySpeech.stopListening();
-                        System.out.println("SOLTADO");
                         break;
                 }
                 return false;
