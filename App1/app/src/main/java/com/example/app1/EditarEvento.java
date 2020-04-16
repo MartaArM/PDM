@@ -67,6 +67,17 @@ public class EditarEvento extends AppCompatActivity {
         String hora_fin = etHoraFin.getText().toString();
 
         db.eventoDao().actualizarEvento(titulo, hora_ini, hora_fin, valores.get(0), valores.get(1));
+        ArrayList<String> valores_aux = new ArrayList<>();
+        valores_aux.add(valores.get(0));
+        valores_aux.add(hora_ini);
+        valores_aux.add(hora_fin);
+        valores_aux.add(titulo);
+        Intent intent = new Intent(EditarEvento.this, VerEvento.class);
+
+        //Actualizar la vista
+        intent.putStringArrayListExtra("valores", valores_aux);
         finish();
+        startActivity(intent);
+
     }
 }

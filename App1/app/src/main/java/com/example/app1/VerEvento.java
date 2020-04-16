@@ -1,6 +1,8 @@
 package com.example.app1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.room.Room;
 
 import android.content.Intent;
