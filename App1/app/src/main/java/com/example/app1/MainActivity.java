@@ -24,6 +24,7 @@ import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> arrayAdapter;
     public AppDatabase db;
     SpeechRecognizer mySpeech;
+    TextToSpeech myBot;
     Intent speechintent;
+
+    TextView prueba;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -77,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         calendario = findViewById(R.id.calendarView);
         lv = findViewById(R.id.lvEventos);
         button_bot = findViewById(R.id.ibbot);
+        prueba = findViewById(R.id.prueba);
 
         your_array_list = new ArrayList<String>();
 
@@ -133,6 +138,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        myBot = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS){
+                    myBot.setLanguage(Locale.getDefault());
+                }
+            }
+        });
+
         mySpeech = SpeechRecognizer.createSpeechRecognizer(this);
         speechintent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         speechintent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -174,9 +188,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResults(Bundle results) {
                 System.out.println("ENTRA");
                 ArrayList<String> matchs = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                if (matchs != null)
+                if (matchs != null) {
                     prueba.setText(matchs.get(0));
-
+                    myBot.speak(matchs.get(0), TextToSpeech.QUEUE_FLUSH, null, null);
+                }
             }
 
             @Override
@@ -203,6 +218,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
     private String dameFecha() {
