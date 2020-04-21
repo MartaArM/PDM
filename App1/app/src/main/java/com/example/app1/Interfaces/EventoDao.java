@@ -21,6 +21,10 @@ public interface EventoDao {
     @Query("SELECT * FROM "+Evento.TABLE_NAME+" WHERE fecha" +" = :fecha")
     List<Evento> getEventoFecha(String fecha);
 
+    // seleccionar por titulo
+    @Query("SELECT * FROM "+Evento.TABLE_NAME+" WHERE titulo" +" = :titulo")
+    List<Evento> getEventoTitulo(String titulo);
+
     //insertar
     @Insert
     void aniadir(Evento ... eventos);
