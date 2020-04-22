@@ -32,6 +32,7 @@
         android:layout_width="350dp"
         android:layout_height="179dp"
         android:layout_marginStart="31dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
 
@@ -39,10 +40,11 @@
         android:id="@+id/ibbot"
         android:layout_width="442dp"
         android:layout_height="67dp"
+        android:layout_marginTop="220dp"
         android:backgroundTint="#9C9C9C"
         android:tint="#272727"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lvEventos"
         app:srcCompat="@android:drawable/ic_btn_speak_now" />

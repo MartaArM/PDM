@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import com.example.app1.Database.AppDatabase;
 import com.example.app1.Entidad.Evento;
+import com.google.gson.JsonElement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,10 +52,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import ai.api.AIListener;
+import ai.api.android.AIConfiguration;
+import ai.api.android.AIService;
+import ai.api.model.AIError;
+import ai.api.model.AIResponse;
+import ai.api.model.Result;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AIListener {
     private CalendarView calendario;
     private ListView lv;
     private ImageButton button_bot;
@@ -66,14 +75,21 @@ public class MainActivity extends AppCompatActivity {
     SpeechRecognizer mySpeech;
     TextToSpeech myBot;
     Intent speechintent;
+    String accessToken;
 
     TextView prueba;
+    private AIService aiService;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        accessToken = "198a751bfb7d4cdfbf4facae873d5186";
+        final AIConfiguration config = new AIConfiguration(accessToken, AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
+        aiService = AIService.getService(this, config);
+        aiService.setListener(this);
 
         // Comprobamos permisos para escuchar
         comprobarPermisos();
@@ -186,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResults(Bundle results) {
-                System.out.println("ENTRA");
                 ArrayList<String> matchs = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (matchs != null) {
                     prueba.setText(matchs.get(0));
@@ -209,10 +224,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN: // Cuando aprieto el botón
-                        mySpeech.startListening(speechintent);
+                        //mySpeech.startListening(speechintent);
+                        aiService.startListening();
                         break;
                     case MotionEvent.ACTION_UP: //Cuando lo suelto
-                        mySpeech.stopListening();
+                        //mySpeech.stopListening();
+                        aiService.stopListening();
                         break;
                 }
                 return false;
@@ -268,10 +285,50 @@ public class MainActivity extends AppCompatActivity {
     private void comprobarPermisos() {
         if (!(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
                 PackageManager.PERMISSION_GRANTED)) {
-            Intent intent_perm = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            /*Intent intent_perm = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                     Uri.parse("package: "+getPackageName()));
             startActivity(intent_perm);
-            finish();
+            finish(); */
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 200);
         }
+    }
+
+    @Override
+    public void onResult(AIResponse result) {
+        Result resultado = result.getResult();
+
+        String parametros = "";
+
+        if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
+            for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()){
+                parametros += "(" + entry.getKey() + ", " + entry.getValue() + ")";
+            }
+        }
+
+    }
+
+    @Override
+    public void onError(AIError error) {
+
+    }
+
+    @Override
+    public void onAudioLevel(float level) {
+
+    }
+
+    @Override
+    public void onListeningStarted() {
+
+    }
+
+    @Override
+    public void onListeningCanceled() {
+
+    }
+
+    @Override
+    public void onListeningFinished() {
+
     }
 }

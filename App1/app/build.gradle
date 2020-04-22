@@ -35,5 +35,13 @@ dependencies {
     // Room para database
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+
+    implementation 'ai.api:libai:1.6.12'
+    implementation 'ai.api:sdk:2.0.7@aar'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.google.code.gson:gson:2.7'
+    implementation 'commons-io:commons-io:2.4'
+
+    annotationProcessor 'org.apache.logging.log4j:log4j-core:2.2'
 }
 
