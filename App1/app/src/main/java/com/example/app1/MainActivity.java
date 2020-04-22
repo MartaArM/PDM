@@ -305,6 +305,9 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             }
         }
 
+       // prueba.setText(resultado.getFulfillment().getSpeech());
+        myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
+       
     }
 
     @Override
