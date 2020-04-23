@@ -297,17 +297,51 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     public void onResult(AIResponse result) {
         Result resultado = result.getResult();
 
-        String parametros = "";
+        String action = resultado.getAction();
+        if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
+        }
+        else {
+            if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
+                String parametros = "";
+                String dia = "";
+                String mes = "";
+                String titulo = "";
+                String hora = "";
+                String momento = "";
+                for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
+                    if (entry.getKey().equals("dia")) {
+                        dia = entry.getValue().toString().replace("\"", "");
+                    } else if (entry.getKey().equals("mes")) {
+                        mes = entry.getValue().toString().replace("\"", "");
+                    } else if (entry.getKey().equals("any")) {
+                        titulo = entry.getValue().toString().replace("\"", "");
+                    } else if (entry.getKey().equals("hora")) {
+                        hora = entry.getValue().toString().replace("a las ", "");
+                        hora = hora.replace("\"", "");
+                        hora = hora.replace("[", "");
+                        hora = hora.replace("]", "");
+                    } else if (entry.getKey().equals("momento")) {
+                        momento = entry.getValue().toString().replace("\"", "");
+                    }
 
-        if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
-            for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()){
-                parametros += "(" + entry.getKey() + ", " + entry.getValue() + ")";
+                    parametros += "(" + entry.getKey() + ", " + entry.getValue() + ")\n";
+                }
+
+                try {
+                    prueba.setText(parametros + "\nHora" + hora_momento(hora, momento));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
-       // prueba.setText(resultado.getFulfillment().getSpeech());
+
+
         myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
-       
+
+        //resultado.getSource();
+        //myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
+
     }
 
     @Override
@@ -334,4 +368,48 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     public void onListeningFinished() {
 
     }
+
+    private String hora_momento(String hora, String momento) throws ParseException {
+        String hora_aux = "";
+        SimpleDateFormat ddd = new SimpleDateFormat("hh:mm");
+        Date d = null;
+
+        if (momento.equals("de la tarde")) {
+            if (hora.equals("1"))
+                hora_aux = "13";
+            else if (hora.equals("2"))
+                hora_aux = "14";
+            else if (hora.equals("3"))
+                hora_aux = "15";
+            else if (hora.equals("4"))
+                hora_aux = "16";
+            else if (hora.equals("5"))
+                hora_aux = "17";
+            else if (hora.equals("6"))
+                hora_aux = "18";
+            else if (hora.equals("7"))
+                hora_aux = "19";
+            else if (hora.equals("8"))
+                hora_aux = "20";
+            else if (hora.equals("9"))
+                hora_aux = "21";
+        } else if (momento.equals("de la noche")) {
+            if (hora.equals("8"))
+                hora_aux = "20";
+            else if (hora.equals("9"))
+                hora_aux = "21";
+            else if (hora.equals("10"))
+                hora_aux = "22";
+            else if (hora.equals("11"))
+                hora_aux = "23";
+            else if (hora.equals("12"))
+                hora_aux = "24";
+        } else {
+            hora_aux = hora;
+        }
+        d = ddd.parse(hora_aux);
+
+        return d.toString();
+    }
+
 }
