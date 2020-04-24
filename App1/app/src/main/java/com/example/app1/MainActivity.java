@@ -80,6 +80,12 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     TextView prueba;
     private AIService aiService;
 
+    String dia_a = "";
+    String mes_a = "";
+    String titulo_a = "";
+    String hora_a = "";
+    String hora_b = "";
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,43 +305,43 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
         String action = resultado.getAction();
         if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
+                prueba.setText(hora_b);
         }
         else {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
-                String parametros = "";
-                String dia = "";
-                String mes = "";
-                String titulo = "";
-                String hora = "";
-                String momento = "";
+
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
                     if (entry.getKey().equals("dia")) {
-                        dia = entry.getValue().toString().replace("\"", "");
+                        dia_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("mes")) {
-                        mes = entry.getValue().toString().replace("\"", "");
+                        mes_a = entry.getValue().toString().replace("\"", "");
+                        mes_a = mes(mes_a);
                     } else if (entry.getKey().equals("any")) {
-                        titulo = entry.getValue().toString().replace("\"", "");
-                    } else if (entry.getKey().equals("hora")) {
-                        hora = entry.getValue().toString().replace("a las ", "");
-                        hora = hora.replace("\"", "");
-                        hora = hora.replace("[", "");
-                        hora = hora.replace("]", "");
-                    } else if (entry.getKey().equals("momento")) {
-                        momento = entry.getValue().toString().replace("\"", "");
+                        titulo_a = entry.getValue().toString().replace("\"", "");
+                    } else if (entry.getKey().equals("time")) {
+                        hora_a = entry.getValue().toString();
+                        hora_a = hora_a.substring(1, 6);
+                    } else if (entry.getKey().equals("time2")) {
+                        hora_b = entry.getValue().toString();
+                        hora_b = hora_b.substring(1, 6);
                     }
-
-                    parametros += "(" + entry.getKey() + ", " + entry.getValue() + ")\n";
                 }
-
+            } //sumarMinutos(Date date)
+            if (mes_a.isEmpty() || mes_a == "") {
+                Calendar cal = Calendar.getInstance();
+                mes_a = new SimpleDateFormat("MM").format(cal.getTime()).toString();
+            }
+            if (hora_b.isEmpty() || hora_b == "") {
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                Date d = new Date();
                 try {
-                    prueba.setText(parametros + "\nHora" + hora_momento(hora, momento));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    d = sdf.parse(hora_a);
+                } catch (ParseException ex) {
+                    Log.v("Exception", ex.getLocalizedMessage());
                 }
+                hora_b = sumarMinutos(d);
             }
         }
-
-
 
         myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
 
@@ -369,47 +375,53 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
     }
 
-    private String hora_momento(String hora, String momento) throws ParseException {
-        String hora_aux = "";
-        SimpleDateFormat ddd = new SimpleDateFormat("hh:mm");
-        Date d = null;
-
-        if (momento.equals("de la tarde")) {
-            if (hora.equals("1"))
-                hora_aux = "13";
-            else if (hora.equals("2"))
-                hora_aux = "14";
-            else if (hora.equals("3"))
-                hora_aux = "15";
-            else if (hora.equals("4"))
-                hora_aux = "16";
-            else if (hora.equals("5"))
-                hora_aux = "17";
-            else if (hora.equals("6"))
-                hora_aux = "18";
-            else if (hora.equals("7"))
-                hora_aux = "19";
-            else if (hora.equals("8"))
-                hora_aux = "20";
-            else if (hora.equals("9"))
-                hora_aux = "21";
-        } else if (momento.equals("de la noche")) {
-            if (hora.equals("8"))
-                hora_aux = "20";
-            else if (hora.equals("9"))
-                hora_aux = "21";
-            else if (hora.equals("10"))
-                hora_aux = "22";
-            else if (hora.equals("11"))
-                hora_aux = "23";
-            else if (hora.equals("12"))
-                hora_aux = "24";
-        } else {
-            hora_aux = hora;
+    private String mes(String mes) {
+        String mes_num = "";
+        if (mes.equals("enero")) {
+            mes_num = "01";
         }
-        d = ddd.parse(hora_aux);
+        else if (mes.equals("febrero")) {
+            mes_num = "02";
+        }
+        else if (mes.equals("marzo")) {
+            mes_num = "03";
+        }
+        else if (mes.equals("abril")) {
+            mes_num = "04";
+        }
+        else if (mes.equals("mayo")) {
+            mes_num = "05";
+        }
+        else if (mes.equals("junio")) {
+            mes_num = "06";
+        }
+        else if (mes.equals("julio")) {
+            mes_num = "07";
+        }
+        else if (mes.equals("agosto")) {
+            mes_num = "08";
+        }
+        else if (mes.equals("septiembre")) {
+            mes_num = "09";
+        }
+        else if (mes.equals("octubre")) {
+            mes_num = "10";
+        }
+        else if (mes.equals("noviembre")) {
+            mes_num = "11";
+        }
+        else if (mes.equals("diciembre")) {
+            mes_num = "12";
+        }
+        return mes_num;
+    }
 
-        return d.toString();
+    private String sumarMinutos(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, 15);
+
+        return calendar.getTime().toString();
     }
 
 }
