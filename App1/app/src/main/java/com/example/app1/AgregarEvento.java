@@ -62,8 +62,16 @@ public class AgregarEvento extends AppCompatActivity {
         fecha = intent.getStringArrayListExtra("fecha");
         String dia = fecha.get(0);
         String mes = fecha.get(1);
-        String anio = fecha.get(2);
+        Integer mes_i = Integer.parseInt(mes);
+        mes_i+=1;
 
+        if (mes_i < 10) {
+            mes = "0" + mes_i.toString();
+        }
+        else {
+            mes = mes_i.toString();
+        }
+        String anio = fecha.get(2);
         String fecha = dia + "/" + mes + "/" + anio;
 
         return fecha;

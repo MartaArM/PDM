@@ -25,6 +25,10 @@ public interface EventoDao {
     @Query("SELECT * FROM "+Evento.TABLE_NAME+" WHERE titulo" +" = :titulo")
     List<Evento> getEventoTitulo(String titulo);
 
+    // seleccionar por fecha y hora
+    @Query("SELECT * FROM "+Evento.TABLE_NAME+" WHERE fecha" +" = :fecha" + " and hora_inicio" + " = :hora")
+    List<Evento> getEventoFechayHora(String fecha, String hora);
+
     //insertar
     @Insert
     void aniadir(Evento ... eventos);

@@ -27,20 +27,11 @@
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <ListView
-        android:id="@+id/lvEventos"
-        android:layout_width="350dp"
-        android:layout_height="179dp"
-        android:layout_marginStart="31dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
-
     <ImageButton
         android:id="@+id/ibbot"
         android:layout_width="442dp"
         android:layout_height="67dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="18dp"
         android:backgroundTint="#9C9C9C"
         android:tint="#272727"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,5 +49,14 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
+    <ListView
+        android:id="@+id/lvEventos"
+        android:layout_width="361dp"
+        android:layout_height="221dp"
+        android:layout_marginStart="25dp"
+        android:backgroundTint="#8A8A8A"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

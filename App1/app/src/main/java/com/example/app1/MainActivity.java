@@ -304,8 +304,22 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         Result resultado = result.getResult();
 
         String action = resultado.getAction();
+        // Si el usuario decide agrgar evento
         if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
-                prueba.setText(hora_b);
+                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+                // No hay eventos
+                if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
+                    Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
+                    prueba.setText(ev_a.getHora_inicio());
+                    db.eventoDao().aniadir(ev_a);
+                    myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
+                    //Intent intent = new Intent(this,MainActivity.class);
+                   // startActivity(intent);
+
+                }
+                else { // Hay eventos
+                    prueba.setText("Hay eventos");
+                }
         }
         else {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
@@ -320,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         titulo_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("time")) {
                         hora_a = entry.getValue().toString();
-                        hora_a = hora_a.substring(1, 6);
+                        hora_a = hora_a.substring(2, 7);
                     } else if (entry.getKey().equals("time2")) {
                         hora_b = entry.getValue().toString();
                         hora_b = hora_b.substring(1, 6);
@@ -330,12 +344,24 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             if (mes_a.isEmpty() || mes_a == "") {
                 Calendar cal = Calendar.getInstance();
                 mes_a = new SimpleDateFormat("MM").format(cal.getTime()).toString();
+                Integer mes_i = Integer.parseInt(mes_a);
+                mes_i-=1;
+
+                if (mes_i < 10) {
+                    mes_a = "0" + mes_i.toString();
+                }
+                else {
+                    mes_a = mes_i.toString();
+                }
             }
             if (hora_b.isEmpty() || hora_b == "") {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                String sDate1="31/12/1998"+hora_a;
+                //Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);
+                //System.out.println(sDate1+"\t"+date1);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyyHH:mm");
                 Date d = new Date();
                 try {
-                    d = sdf.parse(hora_a);
+                    d = sdf.parse(sDate1);
                 } catch (ParseException ex) {
                     Log.v("Exception", ex.getLocalizedMessage());
                 }
@@ -344,9 +370,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         }
 
         myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
-
-        //resultado.getSource();
-        //myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
 
     }
 
@@ -375,53 +398,55 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
     }
 
+    // Convertir mes en cadena a mes en número
     private String mes(String mes) {
         String mes_num = "";
         if (mes.equals("enero")) {
-            mes_num = "01";
+            mes_num = "00";
         }
         else if (mes.equals("febrero")) {
-            mes_num = "02";
+            mes_num = "01";
         }
         else if (mes.equals("marzo")) {
-            mes_num = "03";
+            mes_num = "02";
         }
         else if (mes.equals("abril")) {
-            mes_num = "04";
+            mes_num = "03";
         }
         else if (mes.equals("mayo")) {
-            mes_num = "05";
+            mes_num = "04";
         }
         else if (mes.equals("junio")) {
-            mes_num = "06";
+            mes_num = "05";
         }
         else if (mes.equals("julio")) {
-            mes_num = "07";
+            mes_num = "06";
         }
         else if (mes.equals("agosto")) {
-            mes_num = "08";
+            mes_num = "07";
         }
         else if (mes.equals("septiembre")) {
-            mes_num = "09";
+            mes_num = "08";
         }
         else if (mes.equals("octubre")) {
-            mes_num = "10";
+            mes_num = "09";
         }
         else if (mes.equals("noviembre")) {
-            mes_num = "11";
+            mes_num = "10";
         }
         else if (mes.equals("diciembre")) {
-            mes_num = "12";
+            mes_num = "11";
         }
         return mes_num;
     }
 
+    // Si el usuario no dice la hora final, le sumo 15 minutos a la hora inicial
     private String sumarMinutos(Date date){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MINUTE, 15);
 
-        return calendar.getTime().toString();
+        return calendar.getTime().toString().substring(11, 16);
     }
 
 }
