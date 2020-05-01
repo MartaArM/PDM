@@ -38,11 +38,18 @@ import android.widget.TextView;
 
 import com.example.app1.Database.AppDatabase;
 import com.example.app1.Entidad.Evento;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.dialogflow.v2.SessionName;
+import com.google.cloud.dialogflow.v2.SessionsClient;
+import com.google.cloud.dialogflow.v2.SessionsSettings;
 import com.google.gson.JsonElement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,8 +65,11 @@ import ai.api.AIListener;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIService;
 import ai.api.model.AIError;
+import ai.api.model.AIEvent;
+import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
+import ai.api.ui.AIDialog;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -80,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     TextView prueba;
     private AIService aiService;
 
+
+
     String dia_a = "";
     String mes_a = "";
     String titulo_a = "";
@@ -92,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Configuración de dialogflow
         accessToken = "198a751bfb7d4cdfbf4facae873d5186";
         final AIConfiguration config = new AIConfiguration(accessToken, AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
@@ -111,8 +124,10 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         lv.setAdapter(arrayAdapter); // list view donde se van a ver los eventos
 
         fecha_actual(); // Fecha actual por si no cambio de dia
+        // Conectar con base de datos
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
+
         // Método de cambio de fecha en calendarview
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -175,66 +190,15 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         speechintent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
-        mySpeech.setRecognitionListener(new RecognitionListener() {
-            @Override
-            public void onReadyForSpeech(Bundle params) {
-
-            }
-
-            @Override
-            public void onBeginningOfSpeech() {
-
-            }
-
-            @Override
-            public void onRmsChanged(float rmsdB) {
-
-            }
-
-            @Override
-            public void onBufferReceived(byte[] buffer) {
-
-            }
-
-            @Override
-            public void onEndOfSpeech() {
-
-            }
-
-            @Override
-            public void onError(int error) {
-
-            }
-
-            @Override
-            public void onResults(Bundle results) {
-                ArrayList<String> matchs = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                if (matchs != null) {
-                    prueba.setText(matchs.get(0));
-                    myBot.speak(matchs.get(0), TextToSpeech.QUEUE_FLUSH, null, null);
-                }
-            }
-
-            @Override
-            public void onPartialResults(Bundle partialResults) {
-
-            }
-
-            @Override
-            public void onEvent(int eventType, Bundle params) {
-
-            }
-        });
+        // Apretar el botón de escuchar (bot)
         button_bot.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN: // Cuando aprieto el botón
-                        //mySpeech.startListening(speechintent);
                         aiService.startListening();
                         break;
                     case MotionEvent.ACTION_UP: //Cuando lo suelto
-                        //mySpeech.stopListening();
                         aiService.stopListening();
                         break;
                 }
@@ -249,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         String fecha = dia + "/" + mes + "/" + anio;
         return fecha;
     }
-
+    // Se envía la fecha a la actividad de añadir
     public void enviarFecha(View view) {
         array_fecha = new ArrayList<String>();
         array_fecha.add(dia);
@@ -276,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         intent.putStringArrayListExtra("valores", valores);
         startActivity(intent);
     }
-
+    // Por si el usuario no cambia de fecha
     public void fecha_actual() {
         Date c = Calendar.getInstance().getTime();
 
@@ -291,10 +255,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     private void comprobarPermisos() {
         if (!(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
                 PackageManager.PERMISSION_GRANTED)) {
-            /*Intent intent_perm = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package: "+getPackageName()));
-            startActivity(intent_perm);
-            finish(); */
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 200);
         }
     }
@@ -313,17 +273,15 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     prueba.setText(ev_a.getHora_inicio());
                     db.eventoDao().aniadir(ev_a);
                     myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
-                    //Intent intent = new Intent(this,MainActivity.class);
-                   // startActivity(intent);
 
                 }
                 else { // Hay eventos
-                    prueba.setText("Hay eventos");
+                    //myBot.speak("Ya hay un evento a esa hora. ¿Desea añadirlo igualmente?", TextToSpeech.QUEUE_FLUSH, null, null);
                 }
         }
         else {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
-
+                //Coger los valores de los parametros
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
                     if (entry.getKey().equals("dia")) {
                         dia_a = entry.getValue().toString().replace("\"", "");
@@ -340,7 +298,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         hora_b = hora_b.substring(1, 6);
                     }
                 }
-            } //sumarMinutos(Date date)
+            }
+            // Si el usuario no dice mes, se pone el mes actual
             if (mes_a.isEmpty() || mes_a == "") {
                 Calendar cal = Calendar.getInstance();
                 mes_a = new SimpleDateFormat("MM").format(cal.getTime()).toString();
@@ -356,8 +315,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             }
             if (hora_b.isEmpty() || hora_b == "") {
                 String sDate1="31/12/1998"+hora_a;
-                //Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);
-                //System.out.println(sDate1+"\t"+date1);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyyHH:mm");
                 Date d = new Date();
                 try {
@@ -448,5 +405,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
         return calendar.getTime().toString().substring(11, 16);
     }
+
 
 }
