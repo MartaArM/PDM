@@ -56,7 +56,7 @@ public class VerEvento extends AppCompatActivity {
     public void eliminarEvento(View view){
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
-        db.eventoDao().deleteByHora(valores.get(0), valores.get(1));
+        db.eventoDao().deleteByHora(valores.get(0), valores.get(1), valores.get(3));
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }

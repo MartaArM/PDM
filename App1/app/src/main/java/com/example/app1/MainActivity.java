@@ -354,10 +354,48 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     mes_a = mes_i.toString();
                 }
             }
-        }
+        } // Si el usuario confirma que quiere eliminar
         else if (action.equals("QuestionDeleteEvent.QuestionDeleteEvent-yes")) {
+            String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+            db.eventoDao().deleteByHora(fecha_a, hora_a, titulo_a);
+            myBot.speak("Evento eliminado", TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+        else if (action.equals("edit-action")) {
+            if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
+                //Coger los valores de los parametros
+                for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
+                    if (entry.getKey().equals("dia")) {
+                        dia_a = entry.getValue().toString().replace("\"", "");
+                    } else if (entry.getKey().equals("mes")) {
+                        mes_a = entry.getValue().toString().replace("\"", "");
+                        mes_a = mes(mes_a);
+                    } else if (entry.getKey().equals("any")) {
+                        titulo_a = entry.getValue().toString().replace("\"", "");
+                    } else if (entry.getKey().equals("time")) {
+                        hora_a = entry.getValue().toString();
+                        hora_a = hora_a.substring(2, 7);
+                    }
+                }
+            }
+            // Si el usuario no dice mes, se pone el mes actual
+            if (mes_a.isEmpty() || mes_a == "") {
+                Calendar cal = Calendar.getInstance();
+                mes_a = new SimpleDateFormat("MM").format(cal.getTime()).toString();
+                Integer mes_i = Integer.parseInt(mes_a);
+                mes_i-=1;
+
+                if (mes_i < 10) {
+                    mes_a = "0" + mes_i.toString();
+                }
+                else {
+                    mes_a = mes_i.toString();
+                }
+            }
+        }
+        else if (action.equals("QuestionEditEvent.QuestionEditEvent-yes")) {
 
         }
+
 
 
         myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
