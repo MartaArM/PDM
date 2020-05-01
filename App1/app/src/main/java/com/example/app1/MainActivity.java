@@ -268,15 +268,14 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
                 String fecha_a = dia_a + "/" + mes_a + "/" + anio;
                 // No hay eventos
+                Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
+                prueba.setText(ev_a.getHora_inicio());
+                db.eventoDao().aniadir(ev_a);
                 if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
-                    Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
-                    prueba.setText(ev_a.getHora_inicio());
-                    db.eventoDao().aniadir(ev_a);
                     myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
-
                 }
                 else { // Hay eventos
-                    //myBot.speak("Ya hay un evento a esa hora. ¿Desea añadirlo igualmente?", TextToSpeech.QUEUE_FLUSH, null, null);
+                    myBot.speak("Se ha añadido el evento, pero ya había una cita en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
                 }
         }
         else {
