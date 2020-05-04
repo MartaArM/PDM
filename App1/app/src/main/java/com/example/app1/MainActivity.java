@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
                 hora_b = sumarMinutos(d);
             }
-        }
+        } // El usuario quiere borrar
         else if (action.equals("delete-actions")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             String fecha_a = dia_a + "/" + mes_a + "/" + anio;
             db.eventoDao().deleteByHora(fecha_a, hora_a, titulo_a);
             myBot.speak("Evento eliminado", TextToSpeech.QUEUE_FLUSH, null, null);
-        }
+        } // Si el usuario quiere editar
         else if (action.equals("edit-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
