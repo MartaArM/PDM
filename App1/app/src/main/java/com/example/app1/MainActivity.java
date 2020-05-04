@@ -1,27 +1,10 @@
 package com.example.app1;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.room.Room;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.provider.CalendarContract;
-import android.provider.Settings;
-import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
@@ -31,30 +14,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.room.Room;
+
 import com.example.app1.Database.AppDatabase;
 import com.example.app1.Entidad.Evento;
-import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.dialogflow.v2.SessionName;
-import com.google.cloud.dialogflow.v2.SessionsClient;
-import com.google.cloud.dialogflow.v2.SessionsSettings;
 import com.google.gson.JsonElement;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -65,13 +41,8 @@ import ai.api.AIListener;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIService;
 import ai.api.model.AIError;
-import ai.api.model.AIEvent;
-import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
-import ai.api.ui.AIDialog;
-
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity implements AIListener {
     private CalendarView calendario;
@@ -267,13 +238,17 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
                 String fecha_a = dia_a + "/" + mes_a + "/" + anio;
                 // No hay eventos
-                Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
-                prueba.setText(ev_a.getHora_inicio());
-                db.eventoDao().aniadir(ev_a);
+
                 if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
+                    Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
+                    prueba.setText(ev_a.getHora_inicio());
+                    db.eventoDao().aniadir(ev_a);
                     myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
                 }
                 else { // Hay eventos
+                    Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
+                    prueba.setText(ev_a.getHora_inicio());
+                    db.eventoDao().aniadir(ev_a);
                     myBot.speak("Se ha añadido el evento, pero ya había una cita en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
                 }
         }
@@ -322,8 +297,9 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
                 hora_b = sumarMinutos(d);
             }
+            myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
         } // El usuario quiere borrar
-        else if (action.equals("delete-actions")) {
+        else if (action.equals("delete-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
@@ -336,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         titulo_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("time")) {
                         hora_a = entry.getValue().toString();
-                        hora_a = hora_a.substring(2, 7);
+                        hora_a = hora_a.substring(1, 6);
                     }
                 }
             }
@@ -354,11 +330,17 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     mes_a = mes_i.toString();
                 }
             }
+            myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
         } // Si el usuario confirma que quiere eliminar
         else if (action.equals("QuestionDeleteEvent.QuestionDeleteEvent-yes")) {
             String fecha_a = dia_a + "/" + mes_a + "/" + anio;
-            db.eventoDao().deleteByHora(fecha_a, hora_a, titulo_a);
-            myBot.speak("Evento eliminado", TextToSpeech.QUEUE_FLUSH, null, null);
+            if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
+                myBot.speak("No se ha encontrado ningún evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
+            }
+            else {
+                db.eventoDao().deleteByHora(fecha_a, hora_a, titulo_a);
+                myBot.speak("Evento eliminado", TextToSpeech.QUEUE_FLUSH, null, null);
+            }
         } // Si el usuario quiere editar
         else if (action.equals("edit-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
@@ -391,14 +373,12 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     mes_a = mes_i.toString();
                 }
             }
+            myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
         }
         else if (action.equals("QuestionEditEvent.QuestionEditEvent-yes")) {
 
         }
 
-
-
-        myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
 
     }
 
