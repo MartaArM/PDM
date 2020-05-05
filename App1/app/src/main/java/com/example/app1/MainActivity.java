@@ -236,21 +236,19 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         String action = resultado.getAction();
         // Si el usuario decide agrgar evento
         if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
-                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
-                // No hay eventos
-
-                if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
-                    Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
-                    prueba.setText(ev_a.getHora_inicio());
-                    db.eventoDao().aniadir(ev_a);
-                    myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
-                }
-                else { // Hay eventos
-                    Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
-                    prueba.setText(ev_a.getHora_inicio());
-                    db.eventoDao().aniadir(ev_a);
-                    myBot.speak("Se ha añadido el evento, pero ya había una cita en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
-                }
+            String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+            // No hay eventos
+            if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
+                Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
+                prueba.setText(ev_a.getHora_inicio());
+                db.eventoDao().aniadir(ev_a);
+                myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
+            } else { // Hay eventos
+                Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
+                prueba.setText(ev_a.getHora_inicio());
+                db.eventoDao().aniadir(ev_a);
+                myBot.speak("Se ha añadido el evento, pero ya había una cita en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
+            }
         }
         else if(action.equals("addevent-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
@@ -334,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         } // Si el usuario confirma que quiere eliminar
         else if (action.equals("QuestionDeleteEvent.QuestionDeleteEvent-yes")) {
             String fecha_a = dia_a + "/" + mes_a + "/" + anio;
-            if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
+            if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
                 myBot.speak("No se ha encontrado ningún evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
             }
             else {
@@ -374,10 +372,35 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
+        } // Cuando el usuario decide que quiere editar
+        else if (action.equals("QuestionEditTitle.QuestionEditTitle-custom")) {
+            String titulo_edit = "";
+            if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
+                //Coger los valores de los parametros
+                for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
+                    if (entry.getKey().equals("any")) {
+                        titulo_edit = entry.getValue().toString().replace("\"", "");
+                    }
+                }
+                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+                if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
+                    myBot.speak("No hay un evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
+                }
+                else {
+                    db.eventoDao().actualizarEvento(fecha_a, titulo_edit, hora_a, hora_b, fecha_a, hora_a, titulo_a);
+                    myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                }
+            }
         }
-        else if (action.equals("QuestionEditEvent.QuestionEditEvent-yes")) {
+        else if (action.equals("QuestionAddEvent.QuestionAddEvent-no") ||
+                action.equals("QuestionDeleteEvent.QuestionDeleteEvent-no") ||
+                action.equals("QuestionEditEvent.QuestionEditEvent-no") ||
+                action.equals("Cancel") ||
+                action.equals("QuestionEditEvent.QuestionEditEvent-yes") ||
+                action.equals("EditTitle")) {
+            myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
+        }
 
-        }
 
 
     }

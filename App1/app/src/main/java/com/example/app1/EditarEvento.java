@@ -66,7 +66,7 @@ public class EditarEvento extends AppCompatActivity {
         etHoraFin = findViewById(R.id.ethorafin);
         String hora_fin = etHoraFin.getText().toString();
 
-        db.eventoDao().actualizarEvento(titulo, hora_ini, hora_fin, valores.get(0), valores.get(1));
+        db.eventoDao().actualizarEvento(valores.get(0), titulo, hora_ini, hora_fin, valores.get(0), valores.get(1), valores.get(3));
         ArrayList<String> valores_aux = new ArrayList<>();
         valores_aux.add(valores.get(0));
         valores_aux.add(hora_ini);

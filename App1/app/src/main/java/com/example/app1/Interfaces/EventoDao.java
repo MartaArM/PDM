@@ -29,6 +29,10 @@ public interface EventoDao {
     @Query("SELECT * FROM "+Evento.TABLE_NAME+" WHERE fecha" +" = :fecha" + " and hora_inicio" + " = :hora")
     List<Evento> getEventoFechayHora(String fecha, String hora);
 
+    // seleccionar por fecha, hora y título
+    @Query("SELECT * FROM "+Evento.TABLE_NAME+" WHERE fecha" +" = :fecha" + " and hora_inicio" + " = :hora" + " and titulo" + " = :titulo")
+    List<Evento> getEventoFechaHoraTitulo(String fecha, String hora, String titulo);
+
     //insertar
     @Insert
     void aniadir(Evento ... eventos);
@@ -50,9 +54,12 @@ public interface EventoDao {
     int updateEntidad(Evento obj);
 
     //actualizar evento
-    @Query("UPDATE " + Evento.TABLE_NAME + " SET titulo" + " = :titulo" + ", hora_inicio" + " = :hora_ini_n" +
-            ", hora_fin" + " = :hora_f" + " WHERE fecha" + " = :fecha" + " AND hora_inicio" + " = :hora_ini")
-    int actualizarEvento(String titulo, String hora_ini_n, String hora_f, String fecha, String hora_ini);
+    @Query("UPDATE " + Evento.TABLE_NAME + " SET titulo" + " = :titulo" + ", hora_inicio" + " = :hora_ini_n"
+            + ", fecha" + " = :fecha"
+            +", hora_fin" + " = :hora_f" + " WHERE fecha" + " = :fecha_b" + " AND hora_inicio" + " = :hora_ini"
+            + " AND titulo" + " = :titulo_b")
+    int actualizarEvento(String fecha, String titulo, String hora_ini_n, String hora_f, String fecha_b,
+                         String hora_ini, String titulo_b);
 
     //insertar 2
     @Insert
