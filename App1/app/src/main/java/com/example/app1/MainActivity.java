@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
@@ -37,10 +38,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import ai.api.AIDataService;
 import ai.api.AIListener;
+import ai.api.AIServiceException;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIService;
 import ai.api.model.AIError;
+import ai.api.model.AIEvent;
+import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 
@@ -60,8 +65,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
     TextView prueba;
     private AIService aiService;
-
-
+    private AIDataService aiDataService;
 
     String dia_a = "";
     String mes_a = "";
@@ -78,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         // Configuración de dialogflow
         accessToken = "198a751bfb7d4cdfbf4facae873d5186";
         final AIConfiguration config = new AIConfiguration(accessToken, AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
+        aiDataService = new AIDataService(config);
+        final AIRequest aiRequest = new AIRequest();
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
@@ -243,11 +249,21 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 prueba.setText(ev_a.getHora_inicio());
                 db.eventoDao().aniadir(ev_a);
                 myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } else { // Hay eventos
                 Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
                 prueba.setText(ev_a.getHora_inicio());
                 db.eventoDao().aniadir(ev_a);
                 myBot.speak("Se ha añadido el evento, pero ya había una cita en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
+                try {
+                    Thread.sleep(9000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
         else if(action.equals("addevent-action")) {
@@ -334,13 +350,23 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             String fecha_a = dia_a + "/" + mes_a + "/" + anio;
             if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
                 myBot.speak("No se ha encontrado ningún evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             else {
                 db.eventoDao().deleteByHora(fecha_a, hora_a, titulo_a);
                 myBot.speak("Evento eliminado", TextToSpeech.QUEUE_FLUSH, null, null);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         } // Si el usuario quiere editar
-        else if (action.equals("edit-action")) {
+        else if (action.equals("editevent-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
@@ -353,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         titulo_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("time")) {
                         hora_a = entry.getValue().toString();
-                        hora_a = hora_a.substring(2, 7);
+                        hora_a = hora_a.substring(1, 6);
                     }
                 }
             }
@@ -385,12 +411,28 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 String fecha_a = dia_a + "/" + mes_a + "/" + anio;
                 if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
                     myBot.speak("No hay un evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
-                    db.eventoDao().actualizarEvento(fecha_a, titulo_edit, hora_a, hora_b, fecha_a, hora_a, titulo_a);
+                    db.eventoDao().actualizarTitulo(titulo_edit, fecha_a, hora_a, titulo_a);
                     myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+            StrictMode.setThreadPolicy(policy);
+
+            aiService.resetContexts();
         }
         else if (action.equals("QuestionAddEvent.QuestionAddEvent-no") ||
                 action.equals("QuestionDeleteEvent.QuestionDeleteEvent-no") ||
@@ -400,8 +442,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 action.equals("EditTitle")) {
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
         }
-
-
+        myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
+        prueba.setText(resultado.getResolvedQuery());
 
     }
 

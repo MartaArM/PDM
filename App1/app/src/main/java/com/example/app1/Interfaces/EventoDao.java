@@ -61,6 +61,10 @@ public interface EventoDao {
     int actualizarEvento(String fecha, String titulo, String hora_ini_n, String hora_f, String fecha_b,
                          String hora_ini, String titulo_b);
 
+    @Query("UPDATE " + Evento.TABLE_NAME + " SET titulo" + " = :titulo" + " WHERE fecha" + " = :fecha_b" +
+            " AND hora_inicio" + " = :hora_ini" + " AND titulo" + " = :titulo_b")
+    int actualizarTitulo(String titulo, String fecha_b, String hora_ini, String titulo_b);
+
     //insertar 2
     @Insert
     long insert(Evento usuarios);
