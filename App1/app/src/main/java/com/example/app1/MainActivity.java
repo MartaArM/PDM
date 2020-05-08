@@ -312,6 +312,20 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 hora_b = sumarMinutos(d);
             }
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
+            if (resultado.getFulfillment().getSpeech().contains("desea")){
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         } // El usuario quiere borrar
         else if (action.equals("delete-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
@@ -345,6 +359,20 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
+            if (resultado.getFulfillment().getSpeech().contains("desea")){
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         } // Si el usuario confirma que quiere eliminar
         else if (action.equals("QuestionDeleteEvent.QuestionDeleteEvent-yes")) {
             String fecha_a = dia_a + "/" + mes_a + "/" + anio;
@@ -398,6 +426,20 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
+            if (resultado.getFulfillment().getSpeech().indexOf("desea") != -1){
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         } // Cuando el usuario decide que quiere editar
         else if (action.equals("QuestionEditTitle.QuestionEditTitle-custom")) {
             String titulo_edit = "";
@@ -428,10 +470,44 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
 
+            // Elimina el contexto para poder empezar una conversación de nuevo
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
             StrictMode.setThreadPolicy(policy);
+            aiService.resetContexts();
+        }
+        else if (action.equals("QuestionEditStartHour.QuestionEditStartHour-custom")) {
+            String hora_ini = "";
+            if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
+                //Coger los valores de los parametros
+                for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
+                    if (entry.getKey().equals("time")) {
+                        hora_ini= entry.getValue().toString();
+                        hora_ini = hora_ini.substring(1, 6);
+                    }
+                }
+                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+                if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
+                    myBot.speak("No hay un evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    db.eventoDao().actualizarHoraIni(hora_ini, fecha_a, hora_a, titulo_a);
+                    myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
+            // Elimina el contexto para poder empezar una conversación de nuevo
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
             aiService.resetContexts();
         }
         else if (action.equals("QuestionAddEvent.QuestionAddEvent-no") ||
@@ -439,12 +515,17 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 action.equals("QuestionEditEvent.QuestionEditEvent-no") ||
                 action.equals("Cancel") ||
                 action.equals("QuestionEditEvent.QuestionEditEvent-yes") ||
-                action.equals("EditTitle")) {
+                action.equals("EditTitle") ||
+                action.equals("EditStartHour") ||
+                action.equals("EditEndHour")) {
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
-        }
-        myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
-        prueba.setText(resultado.getResolvedQuery());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
+        }
     }
 
     @Override
