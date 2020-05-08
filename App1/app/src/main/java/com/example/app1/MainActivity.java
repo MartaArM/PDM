@@ -440,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     e.printStackTrace();
                 }
             }
-        } // Cuando el usuario decide que quiere editar
+        } // Cuando el usuario decide que quiere editar el título
         else if (action.equals("QuestionEditTitle.QuestionEditTitle-custom")) {
             String titulo_edit = "";
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
@@ -475,6 +475,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             StrictMode.setThreadPolicy(policy);
             aiService.resetContexts();
         }
+        // El usuario decide editar la hora de inicio
         else if (action.equals("QuestionEditStartHour.QuestionEditStartHour-custom")) {
             String hora_ini = "";
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
@@ -504,11 +505,37 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     }
                 }
             }
-
-            // Elimina el contexto para poder empezar una conversación de nuevo
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            aiService.resetContexts();
+        }
+        // El usuario decide editar la hora de fin
+        else if (action.equals("QuestionEditEndHour.QuestionEditEndHour-custom")) {
+            String hora_fin = "";
+            if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
+                //Coger los valores de los parametros
+                for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
+                    if (entry.getKey().equals("time")) {
+                        hora_fin= entry.getValue().toString();
+                        hora_fin = hora_fin.substring(1, 6);
+                    }
+                }
+                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+                if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
+                    myBot.speak("No hay un evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    db.eventoDao().actualizarHoraFin(hora_fin, fecha_a, hora_a, titulo_a);
+                    myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
         else if (action.equals("QuestionAddEvent.QuestionAddEvent-no") ||
                 action.equals("QuestionDeleteEvent.QuestionDeleteEvent-no") ||
