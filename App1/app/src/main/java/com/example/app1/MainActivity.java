@@ -426,16 +426,16 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
-            if (resultado.getFulfillment().getSpeech().indexOf("desea") != -1){
+            if (resultado.getFulfillment().getSpeech().contains("desea")){
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
             else {
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -537,6 +537,49 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
         }
+        // El usuario decide editar la fecha
+        else if (action.equals("QuestionEditDate.QuestionEditDate-custom")) {
+            String fecha_act = "";
+            if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
+                //Coger los valores de los parametros
+                for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
+                    if (entry.getKey().equals("date")) {
+                        fecha_act= entry.getValue().toString().replace("\"", "");
+                    }
+                }
+                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+                String d = fecha_act.substring(8);
+                String m = fecha_act.substring(5, 7);
+                Integer mes_i = Integer.parseInt(m);
+                mes_i-=1;
+
+                if (mes_i < 10) {
+                    m = "0" + mes_i.toString();
+                }
+                else {
+                    m = mes_i.toString();
+                }
+                String a = fecha_act.substring(0, 4);
+                fecha_act = d + "/" + m + "/" + a;
+                if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
+                    myBot.speak("No hay un evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    db.eventoDao().actualizarFecha(fecha_act, fecha_a, hora_a, titulo_a);
+                    myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
         else if (action.equals("QuestionAddEvent.QuestionAddEvent-no") ||
                 action.equals("QuestionDeleteEvent.QuestionDeleteEvent-no") ||
                 action.equals("QuestionEditEvent.QuestionEditEvent-no") ||
@@ -544,7 +587,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 action.equals("QuestionEditEvent.QuestionEditEvent-yes") ||
                 action.equals("EditTitle") ||
                 action.equals("EditStartHour") ||
-                action.equals("EditEndHour")) {
+                action.equals("EditEndHour") ||
+                action.equals("EditDate")) {
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
             try {
                 Thread.sleep(3000);
