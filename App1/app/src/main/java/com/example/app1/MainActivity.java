@@ -272,6 +272,9 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
                     if (entry.getKey().equals("dia")) {
                         dia_a = entry.getValue().toString().replace("\"", "");
+                        if (dia_a.length() == 1){
+                            dia_a = "0" + dia_a;
+                        }
                     } else if (entry.getKey().equals("mes")) {
                         mes_a = entry.getValue().toString().replace("\"", "");
                         mes_a = mes(mes_a);
@@ -333,6 +336,9 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
                     if (entry.getKey().equals("dia")) {
                         dia_a = entry.getValue().toString().replace("\"", "");
+                        if (dia_a.length() == 1){
+                            dia_a = "0" + dia_a;
+                        }
                     } else if (entry.getKey().equals("mes")) {
                         mes_a = entry.getValue().toString().replace("\"", "");
                         mes_a = mes(mes_a);
@@ -400,6 +406,9 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
                     if (entry.getKey().equals("dia")) {
                         dia_a = entry.getValue().toString().replace("\"", "");
+                        if (dia_a.length() == 1){
+                            dia_a = "0" + dia_a;
+                        }
                     } else if (entry.getKey().equals("mes")) {
                         mes_a = entry.getValue().toString().replace("\"", "");
                         mes_a = mes(mes_a);
