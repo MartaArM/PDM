@@ -636,6 +636,23 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         }
                     }
                 }
+                else {
+                    List<Evento> events = db.eventoDao().getEventoFechayHora(fecha_v, hora_v);
+                    if (events.isEmpty()) {
+                        myBot.speak("No tienes ningún evento", TextToSpeech.QUEUE_FLUSH, null, null);
+                    }
+                    else {
+                        for (Evento e : events) {
+                            String ev = "De " + e.getHora_inicio() + "a " + e.getHora_fin() + "tienes " + e.getTitulo();
+                            myBot.speak(ev, TextToSpeech.QUEUE_FLUSH, null, null);
+                            try {
+                                Thread.sleep(5000);
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
             }
         }
         else if (action.equals("QuestionAddEvent.QuestionAddEvent-no") ||
