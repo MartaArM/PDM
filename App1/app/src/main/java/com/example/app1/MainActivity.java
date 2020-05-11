@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     Intent speechintent;
     String accessToken;
 
-    TextView prueba;
     private AIService aiService;
     private AIDataService aiDataService;
 
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         calendario = findViewById(R.id.calendarView);
         lv = findViewById(R.id.lvEventos);
         button_bot = findViewById(R.id.ibbot);
-        prueba = findViewById(R.id.prueba);
 
         your_array_list = new ArrayList<String>();
 
@@ -246,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             // No hay eventos
             if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
                 Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
-                prueba.setText(ev_a.getHora_inicio());
                 db.eventoDao().aniadir(ev_a);
                 myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
@@ -256,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             } else { // Hay eventos
                 Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
-                prueba.setText(ev_a.getHora_inicio());
                 db.eventoDao().aniadir(ev_a);
                 myBot.speak("Se ha añadido el evento, pero ya había una cita en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
