@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#FFFFFF"
     tools:context=".MainActivity">
 
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="395dp"
         android:layout_height="301dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,21 +30,21 @@
 
     <ImageButton
         android:id="@+id/ibbot"
-        android:layout_width="442dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="18dp"
+        android:layout_width="388dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="4dp"
         android:backgroundTint="#9C9C9C"
         android:tint="#272727"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lvEventos"
         app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
     <ListView
         android:id="@+id/lvEventos"
-        android:layout_width="361dp"
-        android:layout_height="221dp"
+        android:layout_width="366dp"
+        android:layout_height="158dp"
         android:layout_marginStart="25dp"
         android:backgroundTint="#8A8A8A"
         app:layout_constraintStart_toStartOf="parent"
