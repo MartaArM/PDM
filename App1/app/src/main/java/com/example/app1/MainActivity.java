@@ -589,6 +589,55 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
         }
+        //Ver eventos
+        else if (action.equals("ViewEvents-action")) {
+            String fecha_v = "";
+            String hora_v = "";
+            if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
+                //Coger los valores de los parametros
+                for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
+                    if (entry.getKey().equals("date")) {
+                        fecha_v = entry.getValue().toString().replace("\"", "");
+                    }
+                    else if (entry.getKey().equals("time")){
+                        hora_v= entry.getValue().toString();
+                        hora_v = hora_v.substring(1, 6);
+                    }
+                }
+
+                String d = fecha_v.substring(8);
+                String m = fecha_v.substring(5, 7);
+                Integer mes_i = Integer.parseInt(m);
+                mes_i-=1;
+
+                if (mes_i < 10) {
+                    m = "0" + mes_i.toString();
+                }
+                else {
+                    m = mes_i.toString();
+                }
+                String a = fecha_v.substring(0, 4);
+                fecha_v = d + "/" + m + "/" + a;
+
+                if (hora_v.isEmpty()) {
+                    List<Evento> events = db.eventoDao().getEventoFecha(fecha_v);
+                    if (events.isEmpty()) {
+                        myBot.speak("No tienes ningún evento", TextToSpeech.QUEUE_FLUSH, null, null);
+                    }
+                    else {
+                        for (Evento e : events) {
+                            String ev = "De " + e.getHora_inicio() + "a " + e.getHora_fin() + "tienes " + e.getTitulo();
+                            myBot.speak(ev, TextToSpeech.QUEUE_FLUSH, null, null);
+                            try {
+                                Thread.sleep(5000);
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        }
         else if (action.equals("QuestionAddEvent.QuestionAddEvent-no") ||
                 action.equals("QuestionDeleteEvent.QuestionDeleteEvent-no") ||
                 action.equals("QuestionEditEvent.QuestionEditEvent-no") ||
