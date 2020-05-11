@@ -44,7 +44,6 @@ import ai.api.AIServiceException;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIService;
 import ai.api.model.AIError;
-import ai.api.model.AIEvent;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
@@ -64,10 +63,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     String accessToken;
 
     private AIService aiService;
-    private AIDataService aiDataService;
 
-    String dia_a = "";
-    String mes_a = "";
+    String fecha_a = "";
     String titulo_a = "";
     String hora_a = "";
     String hora_b = "";
@@ -81,8 +78,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         // Configuración de dialogflow
         accessToken = "198a751bfb7d4cdfbf4facae873d5186";
         final AIConfiguration config = new AIConfiguration(accessToken, AIConfiguration.SupportedLanguages.Spanish, AIConfiguration.RecognitionEngine.System);
-        aiDataService = new AIDataService(config);
-        final AIRequest aiRequest = new AIRequest();
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
@@ -240,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         String action = resultado.getAction();
         // Si el usuario decide agrgar evento
         if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
-            String fecha_a = dia_a + "/" + mes_a + "/" + anio;
             // No hay eventos
             if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
                 Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
@@ -265,62 +259,67 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         else if(action.equals("addevent-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
+                fecha_a = "";
+                titulo_a = "";
+                hora_a = "";
+                hora_b = "";
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
-                    if (entry.getKey().equals("dia")) {
-                        dia_a = entry.getValue().toString().replace("\"", "");
-                        if (dia_a.length() == 1){
-                            dia_a = "0" + dia_a;
-                        }
-                    } else if (entry.getKey().equals("mes")) {
-                        mes_a = entry.getValue().toString().replace("\"", "");
-                        mes_a = mes(mes_a);
+                    if (entry.getKey().equals("date")) {
+                        fecha_a= entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("any")) {
                         titulo_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("time")) {
-                        hora_a = entry.getValue().toString();
-                        hora_a = hora_a.substring(2, 7);
+                        if (!entry.getValue().toString().isEmpty()) {
+                            hora_a = entry.getValue().toString();
+                            hora_a = hora_a.substring(2, 7);
+                        }
                     } else if (entry.getKey().equals("time2")) {
                         hora_b = entry.getValue().toString();
                         hora_b = hora_b.substring(1, 6);
                     }
                 }
             }
-            // Si el usuario no dice mes, se pone el mes actual
-            if (mes_a.isEmpty() || mes_a == "") {
-                Calendar cal = Calendar.getInstance();
-                mes_a = new SimpleDateFormat("MM").format(cal.getTime()).toString();
-                Integer mes_i = Integer.parseInt(mes_a);
-                mes_i-=1;
+            // Arreglamos formato de fecha
+            String d = fecha_a.substring(8);
+            String m = fecha_a.substring(5, 7);
+            Integer mes_i = Integer.parseInt(m);
+            mes_i-=1;
 
-                if (mes_i < 10) {
-                    mes_a = "0" + mes_i.toString();
-                }
-                else {
-                    mes_a = mes_i.toString();
-                }
+            if (mes_i < 10) {
+                m = "0" + mes_i.toString();
             }
+            else {
+                m = mes_i.toString();
+            }
+            String a = fecha_a.substring(0, 4);
+            fecha_a = d + "/" + m + "/" + a;
+
             if (hora_b.isEmpty() || hora_b == "") {
                 String sDate1="31/12/1998"+hora_a;
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyyHH:mm");
-                Date d = new Date();
+                Date dt = new Date();
                 try {
-                    d = sdf.parse(sDate1);
+                    dt = sdf.parse(sDate1);
                 } catch (ParseException ex) {
                     Log.v("Exception", ex.getLocalizedMessage());
                 }
-                hora_b = sumarMinutos(d);
+                hora_b = sumarMinutos(dt);
             }
-            myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
-            if (resultado.getFulfillment().getSpeech().contains("desea")){
+
+            String msg = "¿Desea agregar el evento " + titulo_a + " el día " + d + " de " + mes(m) + " a las " + hora_a + "?";
+
+            if (!resultado.getFulfillment().getSpeech().isEmpty()){
+                myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
             else {
+                myBot.speak(msg, TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -330,14 +329,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
-                    if (entry.getKey().equals("dia")) {
-                        dia_a = entry.getValue().toString().replace("\"", "");
-                        if (dia_a.length() == 1){
-                            dia_a = "0" + dia_a;
-                        }
-                    } else if (entry.getKey().equals("mes")) {
-                        mes_a = entry.getValue().toString().replace("\"", "");
-                        mes_a = mes(mes_a);
+                    if (entry.getKey().equals("date")) {
+                        fecha_a= entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("any")) {
                         titulo_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("time")) {
@@ -346,20 +339,21 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     }
                 }
             }
-            // Si el usuario no dice mes, se pone el mes actual
-            if (mes_a.isEmpty() || mes_a == "") {
-                Calendar cal = Calendar.getInstance();
-                mes_a = new SimpleDateFormat("MM").format(cal.getTime()).toString();
-                Integer mes_i = Integer.parseInt(mes_a);
-                mes_i-=1;
+            // Arreglamos formato de fecha
+            String d = fecha_a.substring(8);
+            String m = fecha_a.substring(5, 7);
+            Integer mes_i = Integer.parseInt(m);
+            mes_i-=1;
 
-                if (mes_i < 10) {
-                    mes_a = "0" + mes_i.toString();
-                }
-                else {
-                    mes_a = mes_i.toString();
-                }
+            if (mes_i < 10) {
+                m = "0" + mes_i.toString();
             }
+            else {
+                m = mes_i.toString();
+            }
+            String a = fecha_a.substring(0, 4);
+            fecha_a = d + "/" + m + "/" + a;
+
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
             if (resultado.getFulfillment().getSpeech().contains("desea")){
                 try {
@@ -377,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             }
         } // Si el usuario confirma que quiere eliminar
         else if (action.equals("QuestionDeleteEvent.QuestionDeleteEvent-yes")) {
-            String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+
             if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
                 myBot.speak("No se ha encontrado ningún evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
@@ -400,14 +394,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
-                    if (entry.getKey().equals("dia")) {
-                        dia_a = entry.getValue().toString().replace("\"", "");
-                        if (dia_a.length() == 1){
-                            dia_a = "0" + dia_a;
-                        }
-                    } else if (entry.getKey().equals("mes")) {
-                        mes_a = entry.getValue().toString().replace("\"", "");
-                        mes_a = mes(mes_a);
+                    if (entry.getKey().equals("date")) {
+                        fecha_a= entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("any")) {
                         titulo_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("time")) {
@@ -417,19 +405,20 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
             // Si el usuario no dice mes, se pone el mes actual
-            if (mes_a.isEmpty() || mes_a == "") {
-                Calendar cal = Calendar.getInstance();
-                mes_a = new SimpleDateFormat("MM").format(cal.getTime()).toString();
-                Integer mes_i = Integer.parseInt(mes_a);
-                mes_i-=1;
+            String d = fecha_a.substring(8);
+            String m = fecha_a.substring(5, 7);
+            Integer mes_i = Integer.parseInt(m);
+            mes_i-=1;
 
-                if (mes_i < 10) {
-                    mes_a = "0" + mes_i.toString();
-                }
-                else {
-                    mes_a = mes_i.toString();
-                }
+            if (mes_i < 10) {
+                m = "0" + mes_i.toString();
             }
+            else {
+                m = mes_i.toString();
+            }
+            String a = fecha_a.substring(0, 4);
+            fecha_a = d + "/" + m + "/" + a;
+
             myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
             if (resultado.getFulfillment().getSpeech().contains("desea")){
                 try {
@@ -455,7 +444,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         titulo_edit = entry.getValue().toString().replace("\"", "");
                     }
                 }
-                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
                 if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
                     myBot.speak("No hay un evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
                     try {
@@ -491,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         hora_ini = hora_ini.substring(1, 6);
                     }
                 }
-                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+
                 if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
                     myBot.speak("No hay un evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
                     try {
@@ -522,7 +510,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         hora_fin = hora_fin.substring(1, 6);
                     }
                 }
-                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
+
                 if (db.eventoDao().getEventoFechaHoraTitulo(fecha_a, hora_a, titulo_a).isEmpty()) {
                     myBot.speak("No hay un evento con esas características.", TextToSpeech.QUEUE_FLUSH, null, null);
                     try {
@@ -552,7 +540,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         fecha_act= entry.getValue().toString().replace("\"", "");
                     }
                 }
-                String fecha_a = dia_a + "/" + mes_a + "/" + anio;
                 String d = fecha_act.substring(8);
                 String m = fecha_act.substring(5, 7);
                 Integer mes_i = Integer.parseInt(m);
@@ -698,41 +685,41 @@ public class MainActivity extends AppCompatActivity implements AIListener {
     // Convertir mes en cadena a mes en número
     private String mes(String mes) {
         String mes_num = "";
-        if (mes.equals("enero")) {
-            mes_num = "00";
+        if (mes.equals("00")) {
+            mes_num = "enero";
         }
-        else if (mes.equals("febrero")) {
-            mes_num = "01";
+        else if (mes.equals("01")) {
+            mes_num = "febrero";
         }
-        else if (mes.equals("marzo")) {
-            mes_num = "02";
+        else if (mes.equals("02")) {
+            mes_num = "marzo";
         }
-        else if (mes.equals("abril")) {
-            mes_num = "03";
+        else if (mes.equals("03")) {
+            mes_num = "abril";
         }
-        else if (mes.equals("mayo")) {
-            mes_num = "04";
+        else if (mes.equals("04")) {
+            mes_num = "mayo";
         }
-        else if (mes.equals("junio")) {
-            mes_num = "05";
+        else if (mes.equals("05")) {
+            mes_num = "junio";
         }
-        else if (mes.equals("julio")) {
-            mes_num = "06";
+        else if (mes.equals("06")) {
+            mes_num = "julio";
         }
-        else if (mes.equals("agosto")) {
-            mes_num = "07";
+        else if (mes.equals("07")) {
+            mes_num = "agosto";
         }
-        else if (mes.equals("septiembre")) {
-            mes_num = "08";
+        else if (mes.equals("08")) {
+            mes_num = "septiembre";
         }
-        else if (mes.equals("octubre")) {
-            mes_num = "09";
+        else if (mes.equals("9")) {
+            mes_num = "octubre";
         }
-        else if (mes.equals("noviembre")) {
-            mes_num = "10";
+        else if (mes.equals("10")) {
+            mes_num = "noviembre";
         }
-        else if (mes.equals("diciembre")) {
-            mes_num = "11";
+        else if (mes.equals("11")) {
+            mes_num = "diciembre";
         }
         return mes_num;
     }
