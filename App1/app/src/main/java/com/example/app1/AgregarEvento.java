@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AgregarEvento extends AppCompatActivity {
@@ -51,12 +52,40 @@ public class AgregarEvento extends AppCompatActivity {
 
         // Pongo el texto en el nuevo textview
         textView = findViewById(R.id.fecha_evento);
-        textView.setText(crear_fecha());
+        try {
+            textView.setText(poner_fecha());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         fecha_fin = crear_fecha_ok();
 
     }
 
+    private String poner_fecha() throws ParseException {
+        Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(crear_fecha());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date1);
+        calendar.add(Calendar.MONTH, 1);
+        date1 = calendar.getTime();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String diaSemana = sdf.format(date1);
+
+        sdf = new SimpleDateFormat("dd");
+        String dia_v = sdf.format(date1);
+
+        sdf = new SimpleDateFormat("MMMM");
+        String mes_v = sdf.format(date1);
+
+        sdf = new SimpleDateFormat("yyyy");
+        String anio_v = sdf.format(date1);
+
+
+        String fecha_v = diaSemana + ", " + dia_v + " de " + mes_v;
+        return fecha_v;
+    }
     private String crear_fecha(){
         fecha = intent.getStringArrayListExtra("fecha");
         String dia = fecha.get(0);
