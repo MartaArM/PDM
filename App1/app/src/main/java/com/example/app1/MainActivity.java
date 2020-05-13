@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -86,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
         // Comprobamos permisos para escuchar
         comprobarPermisos();
+
+        fecha_a = "";
+        titulo_a = "";
+        hora_a = "";
+        hora_b = "";
 
         calendario = findViewById(R.id.calendarView);
         lv = findViewById(R.id.lvEventos);
@@ -262,10 +268,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         else if(action.equals("addevent-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
-                fecha_a = "";
-                titulo_a = "";
-                hora_a = "";
-                hora_b = "";
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
                     if (entry.getKey().equals("date")) {
                         fecha_a= entry.getValue().toString().replace("\"", "");
@@ -274,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     } else if (entry.getKey().equals("time")) {
                         if (!entry.getValue().toString().isEmpty()) {
                             hora_a = entry.getValue().toString();
-                            hora_a = hora_a.substring(2, 7);
+                            hora_a = hora_a.substring(1, 6);
                         }
                     } else if (entry.getKey().equals("time2")) {
                         hora_b = entry.getValue().toString();
@@ -283,20 +285,24 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
             }
             // Arreglamos formato de fecha
-            String d = fecha_a.substring(8);
-            String m = fecha_a.substring(5, 7);
-            Integer mes_i = Integer.parseInt(m);
-            mes_i-=1;
+            String msg = "";
+            if (!fecha_a.isEmpty()) {
+                String d = fecha_a.substring(8);
+                String m = fecha_a.substring(5, 7);
+                Integer mes_i = Integer.parseInt(m);
+                mes_i -= 1;
 
-            if (mes_i < 10) {
-                m = "0" + mes_i.toString();
-            }
-            else {
-                m = mes_i.toString();
-            }
-            String a = fecha_a.substring(0, 4);
-            fecha_a = d + "/" + m + "/" + a;
+                if (mes_i < 10) {
+                    m = "0" + mes_i.toString();
+                } else {
+                    m = mes_i.toString();
+                }
+                String a = fecha_a.substring(0, 4);
+                fecha_a = d + "/" + m + "/" + a;
 
+                msg =  "¿Desea agregar el evento " + titulo_a + " el día " + d + " de " + mes(m) + " a las " + hora_a + "?";
+
+            }
             if (hora_b.isEmpty() || hora_b == "") {
                 String sDate1="31/12/1998"+hora_a;
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyyHH:mm");
@@ -308,8 +314,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
                 hora_b = sumarMinutos(dt);
             }
-
-            String msg = "¿Desea agregar el evento " + titulo_a + " el día " + d + " de " + mes(m) + " a las " + hora_a + "?";
 
 
             if (!resultado.getFulfillment().getSpeech().isEmpty()){
@@ -323,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             else {
                 myBot.speak(msg, TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(6000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -339,40 +343,45 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         titulo_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("time")) {
                         hora_a = entry.getValue().toString();
-                        hora_a = hora_a.substring(1, 6);
+                        if (!hora_a.isEmpty())
+                            hora_a = hora_a.substring(1, 6);
                     }
                 }
             }
+            String msg = "";
             // Arreglamos formato de fecha
-            String d = fecha_a.substring(8);
-            String m = fecha_a.substring(5, 7);
-            Integer mes_i = Integer.parseInt(m);
-            mes_i-=1;
+            if (!fecha_a.isEmpty()) {
+                String d = fecha_a.substring(8);
+                String m = fecha_a.substring(5, 7);
+                Integer mes_i = Integer.parseInt(m);
+                mes_i -= 1;
 
-            if (mes_i < 10) {
-                m = "0" + mes_i.toString();
-            }
-            else {
-                m = mes_i.toString();
-            }
-            String a = fecha_a.substring(0, 4);
-            fecha_a = d + "/" + m + "/" + a;
-
-            myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
-            if (resultado.getFulfillment().getSpeech().contains("desea")){
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (mes_i < 10) {
+                    m = "0" + mes_i.toString();
+                } else {
+                    m = mes_i.toString();
                 }
+                String a = fecha_a.substring(0, 4);
+                fecha_a = d + "/" + m + "/" + a;
+                msg = "¿Desea eliminar el evento " + titulo_a + " el día " + d + " de " + mes(m) + " a las " + hora_a + "?";
             }
-            else {
+            if (!resultado.getFulfillment().getSpeech().isEmpty()){
+                myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            else {
+                myBot.speak(msg, TextToSpeech.QUEUE_FLUSH, null, null);
+                try {
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
         } // Si el usuario confirma que quiere eliminar
         else if (action.equals("QuestionDeleteEvent.QuestionDeleteEvent-yes")) {
 
@@ -395,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             }
         } // Si el usuario quiere editar
         else if (action.equals("editevent-action")) {
+
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
                 for (final Map.Entry<String, JsonElement> entry : resultado.getParameters().entrySet()) {
@@ -404,36 +414,40 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                         titulo_a = entry.getValue().toString().replace("\"", "");
                     } else if (entry.getKey().equals("time")) {
                         hora_a = entry.getValue().toString();
-                        hora_a = hora_a.substring(1, 6);
+                        if (!hora_a.isEmpty())
+                            hora_a = hora_a.substring(1, 6);
                     }
                 }
             }
+            String msg = "";
             // Si el usuario no dice mes, se pone el mes actual
-            String d = fecha_a.substring(8);
-            String m = fecha_a.substring(5, 7);
-            Integer mes_i = Integer.parseInt(m);
-            mes_i-=1;
+            if (!fecha_a.isEmpty()) {
+                String d = fecha_a.substring(8);
+                String m = fecha_a.substring(5, 7);
+                Integer mes_i = Integer.parseInt(m);
+                mes_i -= 1;
 
-            if (mes_i < 10) {
-                m = "0" + mes_i.toString();
+                if (mes_i < 10) {
+                    m = "0" + mes_i.toString();
+                } else {
+                    m = mes_i.toString();
+                }
+                String a = fecha_a.substring(0, 4);
+                fecha_a = d + "/" + m + "/" + a;
+                msg = "¿Desea editar el evento " + titulo_a + " el día " + d + " de " + mes(m) + " a las " + hora_a + "?";
             }
-            else {
-                m = mes_i.toString();
-            }
-            String a = fecha_a.substring(0, 4);
-            fecha_a = d + "/" + m + "/" + a;
-
-            myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
-            if (resultado.getFulfillment().getSpeech().contains("desea")){
+            if (!resultado.getFulfillment().getSpeech().isEmpty()){
+                myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
             else {
+                myBot.speak(msg, TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(6000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
