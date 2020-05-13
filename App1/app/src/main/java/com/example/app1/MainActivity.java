@@ -27,6 +27,7 @@ import androidx.room.Room;
 
 import com.example.app1.Database.AppDatabase;
 import com.example.app1.Entidad.Evento;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.JsonElement;
 
 import java.text.ParseException;
@@ -51,7 +52,7 @@ import ai.api.model.Result;
 public class MainActivity extends AppCompatActivity implements AIListener {
     private CalendarView calendario;
     private ListView lv;
-    private ImageButton button_bot;
+    private FloatingActionButton button_bot;
     public String mes, anio, dia;
     private ArrayList<String> array_fecha;
     List<String> your_array_list;
@@ -307,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             }
 
             String msg = "¿Desea agregar el evento " + titulo_a + " el día " + d + " de " + mes(m) + " a las " + hora_a + "?";
+
 
             if (!resultado.getFulfillment().getSpeech().isEmpty()){
                 myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);

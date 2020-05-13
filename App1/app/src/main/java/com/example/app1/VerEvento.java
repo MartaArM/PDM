@@ -12,12 +12,16 @@ import android.widget.TextView;
 
 import com.example.app1.Database.AppDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class VerEvento extends AppCompatActivity {
     ArrayList<String> valores;
     private Intent intent;
-    private TextView tvFecha, tvTitulo, tvHoraI, tvHoraF;
+    private TextView tvFecha, tvTitulo;
     public AppDatabase db;
 
     @Override
@@ -28,15 +32,39 @@ public class VerEvento extends AppCompatActivity {
         intent = getIntent();
         valores = intent.getStringArrayListExtra("valores");
 
-        ponerFecha();
+        try {
+            ponerFecha();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         ponerTitulo();
-        ponerHoraInicio();
-        ponerHoraFin();
     }
 
-    public void ponerFecha() {
+    public void ponerFecha() throws ParseException {
         tvFecha = findViewById(R.id.tvfecha);
-        tvFecha.setText(valores.get(0));
+        Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(valores.get(0));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date1);
+        calendar.add(Calendar.MONTH, 1);
+        date1 = calendar.getTime();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String diaSemana = sdf.format(date1);
+
+        sdf = new SimpleDateFormat("dd");
+        String dia_v = sdf.format(date1);
+
+        sdf = new SimpleDateFormat("MMMM");
+        String mes_v = sdf.format(date1);
+
+        sdf = new SimpleDateFormat("yyyy");
+        String anio_v = sdf.format(date1);
+
+
+        String fecha_v = diaSemana + ", " + dia_v + " de " + mes_v + ", " + valores.get(1) + "-"
+                + valores.get(2);
+        tvFecha.setText(fecha_v);
     }
 
     public void ponerTitulo() {
@@ -44,15 +72,6 @@ public class VerEvento extends AppCompatActivity {
         tvTitulo.setText(valores.get(3));
     }
 
-    public void ponerHoraInicio() {
-        tvHoraI = findViewById(R.id.tvhorainicio);
-        tvHoraI.setText(valores.get(1));
-    }
-
-    public void ponerHoraFin() {
-        tvHoraF = findViewById(R.id.tvhorafin);
-        tvHoraF.setText(valores.get(2));
-    }
     public void eliminarEvento(View view){
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
