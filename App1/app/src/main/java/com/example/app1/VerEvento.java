@@ -11,17 +11,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.app1.Database.AppDatabase;
+import com.example.app1.Entidad.Evento;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class VerEvento extends AppCompatActivity {
     ArrayList<String> valores;
     private Intent intent;
-    private TextView tvFecha, tvTitulo;
+    private TextView tvFecha, tvTitulo, tvDescripcion, textView;
     public AppDatabase db;
 
     @Override
@@ -38,6 +40,7 @@ public class VerEvento extends AppCompatActivity {
             e.printStackTrace();
         }
         ponerTitulo();
+        ponerDescripcion();
     }
 
     public void ponerFecha() throws ParseException {
@@ -71,6 +74,30 @@ public class VerEvento extends AppCompatActivity {
         tvTitulo = findViewById(R.id.tvtitulo);
         tvTitulo.setText(valores.get(3));
     }
+
+    public void ponerDescripcion() {
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "database-name").allowMainThreadQueries().build();
+        List<Evento> events = db.eventoDao().getEventoFechaHoraTitulo(valores.get(0), valores.get(1), valores.get(3));
+        String descripcion = "";
+
+        for(Evento e : events) {
+            descripcion = e.getDescripcion();
+        }
+
+        tvDescripcion = findViewById(R.id.tvdescripcion);
+
+        if (descripcion.isEmpty()) {
+            textView = findViewById(R.id.textView);
+            textView.setVisibility(View.GONE);
+            tvDescripcion.setVisibility(View.GONE);
+        }
+        else {
+            tvDescripcion.setText(descripcion);
+            valores.add(descripcion);
+        }
+    }
+
 
     public void eliminarEvento(View view){
         db = Room.databaseBuilder(getApplicationContext(),

@@ -30,6 +30,9 @@ public class Evento {
     @ColumnInfo(name = "hora_fin")
     private String hora_fin;
 
+    @ColumnInfo(name = "descripcion")
+    private String descripcion;
+
     public long getId() {
         return id;
     }
@@ -70,15 +73,24 @@ public class Evento {
         this.hora_fin = hora_fin;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     @Ignore
     public Evento() {
     }
 
-    public Evento( String fecha, String titulo, String hora_inicio, String hora_fin) {
+    public Evento( String fecha, String titulo, String hora_inicio, String hora_fin, String descripcion) {
         this.fecha = fecha;
         this.titulo = titulo;
         this.hora_inicio = hora_inicio;
         this.hora_fin = hora_fin;
+        this.descripcion = descripcion;
     }
 
     public static Evento fromContentValues(ContentValues values) {

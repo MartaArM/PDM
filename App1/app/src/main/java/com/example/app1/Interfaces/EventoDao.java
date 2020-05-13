@@ -56,10 +56,11 @@ public interface EventoDao {
     //actualizar evento
     @Query("UPDATE " + Evento.TABLE_NAME + " SET titulo" + " = :titulo" + ", hora_inicio" + " = :hora_ini_n"
             + ", fecha" + " = :fecha"
-            +", hora_fin" + " = :hora_f" + " WHERE fecha" + " = :fecha_b" + " AND hora_inicio" + " = :hora_ini"
+            +", hora_fin" + " = :hora_f" + ", descripcion" + " = :descripcion" +
+            " WHERE fecha" + " = :fecha_b" + " AND hora_inicio" + " = :hora_ini"
             + " AND titulo" + " = :titulo_b")
-    int actualizarEvento(String fecha, String titulo, String hora_ini_n, String hora_f, String fecha_b,
-                         String hora_ini, String titulo_b);
+    int actualizarEvento(String fecha, String titulo, String hora_ini_n, String hora_f, String descripcion,
+                         String fecha_b, String hora_ini, String titulo_b);
 
     // Actualizar solo título
     @Query("UPDATE " + Evento.TABLE_NAME + " SET titulo" + " = :titulo" + " WHERE fecha" + " = :fecha_b" +

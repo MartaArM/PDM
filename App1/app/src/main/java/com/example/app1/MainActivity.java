@@ -49,6 +49,8 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 
+import static com.example.app1.Database.AppDatabase.MIGRATION_1_2;
+
 public class MainActivity extends AppCompatActivity implements AIListener {
     private CalendarView calendario;
     private ListView lv;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         fecha_actual(); // Fecha actual por si no cambio de dia
         // Conectar con base de datos
         db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").allowMainThreadQueries().build();
+                AppDatabase.class, "database-name").allowMainThreadQueries().fallbackToDestructiveMigration().build();
 
         // Método de cambio de fecha en calendarview
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 List<Evento> events = db.eventoDao().getEventoFecha(fecha_aux);
                 your_array_list.clear(); // limpiar array
                 for(Evento e : events) {
-                    String ev = e.getHora_inicio() + "-" + e.getHora_fin() + "  " + e.getTitulo();
+                    String ev = e.getHora_inicio() + "-" + e.getHora_fin()+"\n"+e.getTitulo()+"\n";
                     your_array_list.add(ev);
                 }
 
@@ -141,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  Object item = parent.getItemAtPosition(position);
-                 //System.out.println("ITEM: "+ item.toString());
                 verEvento(item);
             }
         });
@@ -200,7 +201,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         String evento = item.toString();
         String hora_inicio = evento.substring(0, 5);
         String hora_fin = evento.substring(6, 11);
-        String titulo = evento.substring(13);
+        String titulo = evento.substring(12);
+        titulo = titulo.trim();
         ArrayList valores = new ArrayList<String>();
         valores.add(dameFecha());
         valores.add(hora_inicio);
@@ -238,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
             // No hay eventos
             if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
-                Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
+                Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b, "");
                 db.eventoDao().aniadir(ev_a);
                 myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
@@ -247,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     e.printStackTrace();
                 }
             } else { // Hay eventos
-                Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b);
+                Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b, "");
                 db.eventoDao().aniadir(ev_a);
                 myBot.speak("Se ha añadido el evento, pero ya había una cita en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
