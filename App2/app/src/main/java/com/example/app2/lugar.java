@@ -9,6 +9,6 @@ public class lugar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lugar);
+        setContentView(R.layout.activity_lugar);
     }
 }

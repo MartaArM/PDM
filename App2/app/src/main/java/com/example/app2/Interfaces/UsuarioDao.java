@@ -19,7 +19,7 @@ public interface UsuarioDao {
 
     // seleccionar por nombre de usuario
     @Query("SELECT * FROM "+Usuario.TABLE_NAME+" WHERE nombre_usuario" +" = :nombre_u")
-    List<Usuario> getUsuarioNombreUsuario(String nombre_u);
+    Usuario getUsuarioNombreUsuario(String nombre_u);
 
     //insertar
     @Insert

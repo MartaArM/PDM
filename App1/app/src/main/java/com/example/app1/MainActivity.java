@@ -14,11 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,17 +37,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import ai.api.AIDataService;
 import ai.api.AIListener;
-import ai.api.AIServiceException;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIService;
 import ai.api.model.AIError;
-import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 
-import static com.example.app1.Database.AppDatabase.MIGRATION_1_2;
 
 public class MainActivity extends AppCompatActivity implements AIListener {
     private CalendarView calendario;

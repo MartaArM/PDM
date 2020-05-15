@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/etusuario"
             android:layout_width="219dp"
             android:layout_height="30dp"
             android:layout_marginStart="20dp"
@@ -86,7 +86,7 @@
             app:srcCompat="@drawable/password_icon_round" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/etclave"
             android:layout_width="219dp"
             android:layout_height="30dp"
             android:layout_marginStart="20dp"
@@ -99,6 +99,30 @@
             android:textColorHint="#A5A4A4"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <TextView
+            android:id="@+id/tvmensaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="32dp"
+            android:text="Mensaje"
+            android:textColor="@android:color/holo_red_light"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+        <Button
+            android:id="@+id/benviar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="250dp"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:onClick="comprobarDatos"
+            android:text="Enviar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etclave" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
