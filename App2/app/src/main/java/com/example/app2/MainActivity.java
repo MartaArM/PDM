@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         msg = "";
         //Conexión a base de datos
         db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").allowMainThreadQueries().fallbackToDestructiveMigration().build();
+                AppDatabase.class, "database-name").allowMainThreadQueries().
+                fallbackToDestructiveMigration().build();
     }
 
     public void comprobarDatos(View view) {
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         else {
             String clave_aux = user.getClave();
             if (pass.equals(clave_aux)) {
-                Intent intent = new Intent(this, lugar.class);
-                //intent.putStringArrayListExtra("fecha", array_fecha);
+                Intent intent = new Intent(this, Opciones.class);
+                intent.putExtra("name", nombre_us);
                 startActivity(intent);
             }
             else {

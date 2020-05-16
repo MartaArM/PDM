@@ -27,8 +27,14 @@ public class Usuario {
     @ColumnInfo(name = "nombre")
     private String nombre;
 
-    @ColumnInfo(name = "horario")
-    private String horario;
+    @ColumnInfo(name = "hora_entrada")
+    private String hora_entrada;
+
+    @ColumnInfo(name = "hora_salida")
+    private String hora_salida;
+
+    @ColumnInfo(name = "tipo")
+    private String tipo;
 
     public long getId() {
         return id;
@@ -62,24 +68,41 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getHorario() {
-        return horario;
+    public String getHora_entrada() {
+        return hora_entrada;
     }
 
-    public void setHorario(String horario) {
-        this.horario = horario;
+    public void setHora_entrada(String hora_e) {
+        this.hora_entrada = hora_e;
     }
 
+    public String getHora_salida() {
+        return hora_salida;
+    }
 
-    @Ignore
+    public void setHora_salida(String hora_s) {
+        this.hora_salida = hora_s;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     public Usuario() {
     }
 
-    public Usuario( String nombre_usuario, String clave, String nombre, String horario) {
+    public Usuario( String nombre_usuario, String clave, String nombre, String hora_e, String hora_s,
+                    String tipo) {
         this.nombre_usuario = nombre_usuario;
         this.clave = clave;
         this.nombre = nombre;
-        this.horario = horario;
+        this.hora_entrada = hora_e;
+        this.hora_salida = hora_s;
+        this.tipo = tipo;
     }
 
     public static Usuario fromContentValues(ContentValues values) {

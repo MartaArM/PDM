@@ -43,10 +43,10 @@ public interface UsuarioDao {
 
     //actualizar Usuario
     @Query("UPDATE " + Usuario.TABLE_NAME + " SET nombre_usuario" + " = :nombre_usuario" + ", clave" + " = :clave"
-            + ", nombre" + " = :nombre" +", horario" + " = :horario" +
-            " WHERE nombre_usuario" + " = :nombre_u")
-    int actualizarUsuario(String nombre_usuario, String clave, String nombre, String horario,
-                          String nombre_u);
+            + ", nombre" + " = :nombre" +", hora_entrada" + " = :hora_e" +
+            ", hora_salida" + " = :hora_s" + " WHERE nombre_usuario" + " = :nombre_u")
+    int actualizarUsuario(String nombre_usuario, String clave, String nombre, String hora_e,
+                          String hora_s, String nombre_u);
 
     //insertar 2
     @Insert

@@ -103,7 +103,6 @@ public class Horas {
         this.localizacion = localizacion;
     }
 
-    @Ignore
     public Horas() {
     }
 
@@ -118,8 +117,8 @@ public class Horas {
         this.localizacion = localizacion;
     }
 
-    public static Usuario fromContentValues(ContentValues values) {
-        final Usuario obj = new Usuario();
+    public static Horas fromContentValues(ContentValues values) {
+        final Horas obj = new Horas();
         if (values.containsKey(COLUMN_ID)) {
             obj.id = values.getAsLong(COLUMN_ID);
         }
