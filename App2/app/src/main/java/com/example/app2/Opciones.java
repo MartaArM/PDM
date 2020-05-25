@@ -196,4 +196,10 @@ public class Opciones extends AppCompatActivity {
         String hora = hour + ":" + min;
         return hora;
     }
+
+    public void administracion(View v) {
+        Intent intent = new Intent(this, Administracion.class);
+        intent.putExtra("name", user_n);
+        startActivity(intent);
+    }
 }
