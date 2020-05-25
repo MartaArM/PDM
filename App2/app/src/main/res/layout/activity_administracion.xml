@@ -6,4 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".Administracion">
 
+    <Button
+        android:id="@+id/agregar_usuarios"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="90dp"
+        android:background="@drawable/layout_border_button"
+        android:text="Agregar usuarios"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="19dp"
+        android:text="Administración"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/ver_usuarios"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/layout_border_button"
+        android:text="Ver usuarios"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 </androidx.constraintlayout.widget.ConstraintLayout>
