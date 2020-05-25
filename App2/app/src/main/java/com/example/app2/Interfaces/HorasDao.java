@@ -46,9 +46,9 @@ public interface HorasDao {
     int updateEntidad(Horas obj);
 
     //actualizar Horas
-    @Query("UPDATE " + Horas.TABLE_NAME + " SET dia" + " = :dia" + ", hora_entrada" + " = :hora_entrada"
-            + ", hora_salida" + " = :hora_salida" + " WHERE id_usuario" + " = :id_usuario")
-    int actualizarHoras(String dia, String hora_entrada, String hora_salida, String id_usuario);
+    @Query("UPDATE " + Horas.TABLE_NAME + " SET dia" + " = :dia" + ", hora" + " = :hora"
+            + " WHERE id_usuario" + " = :id_usuario")
+    int actualizarHoras(String dia, String hora, String id_usuario);
 
     //insertar 2
     @Insert

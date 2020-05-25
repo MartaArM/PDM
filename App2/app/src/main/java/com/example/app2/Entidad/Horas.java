@@ -24,11 +24,8 @@ public class Horas {
     @ColumnInfo(name = "dia")
     private String dia;
 
-    @ColumnInfo(name = "hora_entrada")
-    private String hora_entrada;
-
-    @ColumnInfo(name = "hora_salida")
-    private String hora_salida;
+    @ColumnInfo(name = "hora")
+    private String hora;
 
     @ColumnInfo(name = "motivo_tarde")
     private String motivo_tarde;
@@ -63,20 +60,12 @@ public class Horas {
         this.dia = dia;
     }
 
-    public String getHora_entrada() {
-        return hora_entrada;
+    public String getHora() {
+        return hora;
     }
 
-    public void setHora_entrada(String hora_entrada) {
-        this.hora_entrada = hora_entrada;
-    }
-
-    public String getHora_salida() {
-        return hora_salida;
-    }
-
-    public void setHora_salida(String hora_salida) {
-        this.hora_salida = hora_salida;
+    public void setHora(String hora) {
+        this.hora = hora;
     }
 
     public String getMotivo_tarde() {
@@ -106,12 +95,11 @@ public class Horas {
     public Horas() {
     }
 
-    public Horas( String id_usuario, String dia, String hora_entrada, String hora_salida,
+    public Horas( String id_usuario, String dia, String hora,
                   String motivo_tarde, String accion, String localizacion) {
         this.id_usuario = id_usuario;
         this.dia = dia;
-        this.hora_entrada = hora_entrada;
-        this.hora_salida = hora_salida;
+        this.hora = hora;
         this.motivo_tarde = motivo_tarde;
         this.accion = accion;
         this.localizacion = localizacion;

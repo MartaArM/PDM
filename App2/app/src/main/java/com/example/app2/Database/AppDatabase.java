@@ -9,7 +9,7 @@ import com.example.app2.Interfaces.HorasDao;
 import com.example.app2.Interfaces.UsuarioDao;
 import com.example.app2.Entidad.Horas;
 
-@Database(entities = {Usuario.class, Horas.class}, version = 2)
+@Database(entities = {Usuario.class, Horas.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     @SuppressWarnings("WeakerAccess")
     public abstract UsuarioDao usuarioDao(); //que permisos va tener listar, eliminar, update, insertar
