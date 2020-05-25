@@ -29,7 +29,6 @@ public class Opciones extends AppCompatActivity {
     Button b_settings;
     ImageView iv_settings;
     String user_n;
-    TextView t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +73,6 @@ public class Opciones extends AppCompatActivity {
         String hora = hour + ":" + min;
 
         boolean comp = compararHoras(hora_entrada_1, hora);
-        t = findViewById(R.id.textView6);
         if (comp){ // Llega a su hora
             //public Horas( String id_usuario, String dia, String hora_entrada, String hora_salida,
                     //String motivo_tarde, String accion, String localizacion)
@@ -105,13 +103,7 @@ public class Opciones extends AppCompatActivity {
     public void fichar_salida(View view) {
         Usuario us = db.usuarioDao().getUsuarioNombreUsuario(user_n);
 
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
-        calendar.setTime(date);   // assigns calendar to given date
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
-
-        String hora = hour + ":" + min;
+        String hora = hora_actual();
 
         Horas h = new Horas(Long.toString(us.getId()), dia_actual(), hora, "",
                 "fichaje_salida", "");
@@ -152,7 +144,7 @@ public class Opciones extends AppCompatActivity {
 
     //Verdad si llega a su hora, falso si llega tarde
     private boolean compararHoras(String h1, String h2) {
-        String sDate1="31/12/1998"+ "10:30"; // hora de entrada
+        String sDate1="31/12/1998"+ h1; // hora de entrada
         String sDate2="31/12/1998"+h2; // hora actual
 
         boolean fichaje = false;
@@ -192,5 +184,16 @@ public class Opciones extends AppCompatActivity {
         }
 
         return fecha;
+    }
+
+    private String hora_actual() {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
+        calendar.setTime(date);   // assigns calendar to given date
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+
+        String hora = hour + ":" + min;
+        return hora;
     }
 }
