@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Agregar_usuario"></activity>
+        <activity android:name=".Ver_usuarios"></activity>
+        <activity android:name=".Agregar_usuario" />
         <activity android:name=".Administracion" />
         <activity android:name=".Opciones" />
         <activity android:name=".motivo_tarde" />
