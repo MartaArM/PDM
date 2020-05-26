@@ -24,4 +24,10 @@ public class Administracion extends AppCompatActivity {
         intent.putExtra("name", user_n);
         startActivity(intent);
     }
+
+    public void ver_usuarios (View v) {
+        Intent intent = new Intent(this, Ver_usuarios.class);
+        intent.putExtra("name", user_n);
+        startActivity(intent);
+    }
 }

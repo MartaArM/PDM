@@ -37,6 +37,7 @@
         android:layout_marginStart="115dp"
         android:layout_marginTop="34dp"
         android:background="@drawable/layout_border_button"
+        android:onClick="ver_usuarios"
         android:text="Ver usuarios"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
