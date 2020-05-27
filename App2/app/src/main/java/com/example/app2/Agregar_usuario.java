@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import com.example.app2.Database.AppDatabase;
 import com.example.app2.Entidad.Usuario;
@@ -19,6 +20,8 @@ public class Agregar_usuario extends AppCompatActivity {
     EditText et_usuario, et_clave, et_nombre, et_hora_e, et_hora_s;
     String usuario, clave, nombre, hora_e, hora_s;
     AppDatabase db;
+    Intent i;
+    RadioGroup rg;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,7 @@ public class Agregar_usuario extends AppCompatActivity {
         setContentView(R.layout.activity_agregar_usuario);
 
         Intent intent = getIntent();
+        i = new Intent(this, Administracion.class);
         user_n = intent.getStringExtra("name");
 
         db = Room.databaseBuilder(getApplicationContext(),
@@ -38,6 +42,22 @@ public class Agregar_usuario extends AppCompatActivity {
         et_nombre = findViewById(R.id.et_nombre);
         et_hora_e = findViewById(R.id.et_hora_e);
         et_hora_s = findViewById(R.id.et_hora_s);
+        String tipo = "";
+        rg = findViewById(R.id.rg_opcion);
+        int rb_selected = rg.getCheckedRadioButtonId();
+
+        if (rb_selected == R.id.rb_admin) {
+            tipo = "admin";
+        }
+        else if (rb_selected == R.id.rb_comercial) {
+            tipo = "comercial";
+        }
+        else if (rb_selected == R.id.rb_montador) {
+            tipo = "montador";
+        }
+        else if (rb_selected == R.id.rb_repartidor) {
+            tipo = "repartidor";
+        }
 
         usuario = et_usuario.getText().toString();
         clave = et_clave.getText().toString();
@@ -49,15 +69,10 @@ public class Agregar_usuario extends AppCompatActivity {
             mostrarMensaje("El nombre de usuario ya existe");
         }
         else {
-            Usuario us = new Usuario(usuario, clave, nombre, hora_e, hora_s, "");
+            Usuario us = new Usuario(usuario, clave, nombre, hora_e, hora_s, tipo);
             db.usuarioDao().insert(us);
 
-            mostrarMensaje("Usuario añadido con exito.");
-
-            Intent intent = new Intent(this, Administracion.class);
-            intent.putExtra("name", user_n);
-            startActivity(intent);
-            finish();
+            mostrarMensajeCerrar("Usuario añadido con exito.");
         }
 
     }
@@ -80,6 +95,23 @@ public class Agregar_usuario extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void mostrarMensajeCerrar(String mensaje){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Agregar_usuario.this);
+
+        builder.setMessage(mensaje);
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                i.putExtra("name", user_n);
+                startActivity(i);
+                finish();
             }
         });
 

@@ -52,6 +52,7 @@ public class Opciones extends AppCompatActivity {
 
     }
 
+    // Botón salida
     public void visitas(View view) {
         Intent intent = new Intent(this, lugar.class);
         intent.putExtra("name", user_n);
@@ -123,7 +124,7 @@ public class Opciones extends AppCompatActivity {
 
     }
 
-
+    // Suma 15 minutos a la hora de entrada
     private String sumarMinutos(String hora){
         String sDate1="31/12/1998"+hora;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyyHH:mm");
@@ -168,6 +169,7 @@ public class Opciones extends AppCompatActivity {
         return fichaje;
     }
 
+    // Sacar día actual para fichar
     private String dia_actual() {
         Date d = new Date();
         Calendar c = Calendar.getInstance();
@@ -186,6 +188,7 @@ public class Opciones extends AppCompatActivity {
         return fecha;
     }
 
+    // Sacar la hora actual para fichaje
     private String hora_actual() {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
@@ -197,6 +200,7 @@ public class Opciones extends AppCompatActivity {
         return hora;
     }
 
+    // Botón de administración
     public void administracion(View v) {
         Intent intent = new Intent(this, Administracion.class);
         intent.putExtra("name", user_n);
