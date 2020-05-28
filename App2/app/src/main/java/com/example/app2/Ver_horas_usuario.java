@@ -75,24 +75,24 @@ public class Ver_horas_usuario extends AppCompatActivity {
 
         List<Horas> horas = db.horasDao().getHoras(us.getId());
         for(Horas hs : horas) {
-            String hora = hs.getDia() + "-" + hs.getHora();
+            String hora = hs.getDia() + " - " + hs.getHora();
             if (hs.getMotivo_tarde() != "") {
                 hora = hora + "\n" + "Motivo tarde: " + hs.getMotivo_tarde();
             }
             if (hs.getAccion().equals("fichaje_entrada")) {
-                hora = hora + "\n" + "fichaje de entrada";
+                hora = hora + "\n" + "Acción: fichaje de entrada";
             }
             else if (hs.getAccion().equals("fichaje_salida")) {
-                hora = hora + "\n" + "fichaje de salida";
+                hora = hora + "\n" + "Acción: fichaje de salida";
             }
             else if (hs.getAccion().equals("visita_cliente")) {
-                hora = hora + "\n" + "visita a cliente";
+                hora = hora + "\n" + "Acción: visita a cliente";
             }
             else if (hs.getAccion().equals("fichaje_salida")) {
-                hora = hora + "\n" + "fichaje de salida";
+                hora = hora + "\n" + "Acción: fichaje de salida";
             }
             else {
-                hora = hora + "\n" + hs.getAccion();
+                hora = hora + "\n" + "Acción: " + hs.getAccion();
             }
 
             if (hs.getLocalizacion() != ""){
