@@ -28,7 +28,6 @@ public class Ver_usuario extends AppCompatActivity {
         Intent intent = getIntent();
         user_n = intent.getStringExtra("name");
         usuario = intent.getStringExtra("user");
-        usuario = usuario.substring(1);
 
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
@@ -79,6 +78,13 @@ public class Ver_usuario extends AppCompatActivity {
     public void eliminar(View v){
         db.usuarioDao().deleteByNombre(usuario);
         mostrarMensajeCerrar("El usuario ha sido eliminado");
+    }
+
+    public void editar (View v) {
+        Intent intent = new Intent(this, Editar_usuario.class);
+        intent.putExtra("name", user_n);
+        intent.putExtra("user", usuario);
+        startActivity(intent);
     }
 
     private void mostrarMensajeCerrar(String mensaje){

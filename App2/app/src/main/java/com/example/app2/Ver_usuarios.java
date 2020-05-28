@@ -111,6 +111,7 @@ public class Ver_usuarios extends AppCompatActivity {
 
         int concat = us.indexOf("\n");
         String n_us = us.substring(concat);
+        n_us = n_us.substring(1);
 
         Intent intent = new Intent(this, Ver_usuario.class);
         intent.putExtra("name", user_n);
