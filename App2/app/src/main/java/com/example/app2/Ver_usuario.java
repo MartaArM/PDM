@@ -85,6 +85,15 @@ public class Ver_usuario extends AppCompatActivity {
         intent.putExtra("name", user_n);
         intent.putExtra("user", usuario);
         startActivity(intent);
+        finish();
+    }
+
+    public void ver_horas(View v) {
+        Intent intent = new Intent(this, Ver_horas_usuario.class);
+        intent.putExtra("name", user_n);
+        intent.putExtra("user", usuario);
+        startActivity(intent);
+        finish();
     }
 
     private void mostrarMensajeCerrar(String mensaje){

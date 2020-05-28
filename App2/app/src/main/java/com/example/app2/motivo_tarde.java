@@ -3,6 +3,8 @@ package com.example.app2;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +20,7 @@ import java.util.Date;
 public class motivo_tarde extends AppCompatActivity {
 
     TextView t;
-    Intent i;
+    Intent i, i1;
     String user_n;
     AppDatabase db;
 
@@ -51,11 +53,14 @@ public class motivo_tarde extends AppCompatActivity {
                 break;
         }
         i = getIntent();
+        i1 = new Intent(this, Administracion.class);
         user_n = i.getStringExtra("name");
         Usuario us = db.usuarioDao().getUsuarioNombreUsuario(user_n);
         Horas h = new Horas(Long.toString(us.getId()), dia_actual(), hora_actual(), motivo,
                 "fichaje_entrada", "");
         db.horasDao().insert(h);
+
+        mostrarMensajeCerrar("El fichaje ha sido correcto.");
     }
 
     private String dia_actual() {
@@ -80,10 +85,42 @@ public class motivo_tarde extends AppCompatActivity {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
         calendar.setTime(date);   // assigns calendar to given date
+        String h, m;
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hour < 10) {
+            h = "0" + hour;
+        }
+        else {
+            h = hour + "";
+        }
+
         int min = calendar.get(Calendar.MINUTE);
 
-        String hora = hour + ":" + min;
+        if (min < 10) {
+            m = "0" + min;
+        }
+        else {
+            m = min + "";
+        }
+
+        String hora = h + ":" + m;
         return hora;
+    }
+
+    private void mostrarMensajeCerrar(String mensaje){
+        AlertDialog.Builder builder = new AlertDialog.Builder(motivo_tarde.this);
+
+        builder.setMessage(mensaje);
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                i.putExtra("name", user_n);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        builder.show();
     }
 }

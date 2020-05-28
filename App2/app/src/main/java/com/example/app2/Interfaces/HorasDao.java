@@ -19,7 +19,7 @@ public interface HorasDao {
 
     // seleccionar por id de usuario
     @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE id_usuario" +" = :id")
-    List<Horas> getHoras(String id);
+    List<Horas> getHoras(long id);
 
     // Seleccionar por día
     @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE dia" +" = :dia")
