@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.app2.Database.AppDatabase;
@@ -26,6 +27,7 @@ public class Ver_usuarios extends AppCompatActivity {
     String user_n;
     List<String> usuarios;
     ArrayAdapter<String> arrayAdapter;
+    SearchView sv_busqueda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,31 @@ public class Ver_usuarios extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object item = parent.getItemAtPosition(position);
                 verUsuario(item);
+            }
+        });
+
+        sv_busqueda = findViewById(R.id.busqueda);
+        // Para buscar un usuario por nombre o nombre de usuario
+        sv_busqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                usuarios.clear();
+
+                List<Usuario> users = db.usuarioDao().getAllUsuarios();
+                for(Usuario us : users) {
+                    if (us.getNombre().contains(newText) || us.getNombre_usuario().contains(newText)) {
+                        String user = us.getNombre() + "\n" + us.getNombre_usuario();
+                        usuarios.add(user);
+                    }
+                }
+
+                arrayAdapter.notifyDataSetChanged(); // cambiar la lista
+                return false;
             }
         });
     }
