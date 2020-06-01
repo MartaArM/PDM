@@ -166,9 +166,11 @@ public class Ver_horas_usuario extends AppCompatActivity {
         String hora = us.substring(12, 18);
 
 
-        /*Intent intent = new Intent(this, Ver_usuario.class);
+        Intent intent = new Intent(this, Ver_horario.class);
         intent.putExtra("name", user_n);
-        intent.putExtra("user", n_us);
-        startActivity(intent); */
+        intent.putExtra("user", usuario);
+        intent.putExtra("fecha", fecha);
+        intent.putExtra("hora", hora);
+        startActivity(intent);
     }
 }

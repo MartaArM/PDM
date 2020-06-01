@@ -25,6 +25,11 @@ public interface HorasDao {
     @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE dia" +" = :dia")
     List<Horas> getHorasDia(String dia);
 
+    // Seleccionar por id, dia y hora
+    @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE dia" +" = :dia" + " AND hora" + " = :hora"
+            + " AND id_usuario" + " = :id")
+    List<Horas> getHorasIdDiaHora(String id, String hora, String dia);
+
     //insertar
     @Insert
     void aniadir(Horas ... Horass);
