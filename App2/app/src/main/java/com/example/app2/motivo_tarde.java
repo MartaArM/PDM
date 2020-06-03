@@ -61,7 +61,6 @@ public class motivo_tarde extends AppCompatActivity {
         db.horasDao().insert(h);
 
         mostrarMensajeCerrar("El fichaje ha sido correcto.");
-        finish();
     }
 
     private String dia_actual() {

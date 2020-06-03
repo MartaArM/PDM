@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Ver_horario"></activity>
+        <activity android:name=".Editar_horario"></activity>
+        <activity android:name=".Ver_horario" />
         <activity android:name=".Ver_horas_usuario" />
         <activity android:name=".Editar_usuario" />
         <activity android:name=".Ver_usuario" />

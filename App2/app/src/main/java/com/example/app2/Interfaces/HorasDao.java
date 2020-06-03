@@ -26,9 +26,9 @@ public interface HorasDao {
     List<Horas> getHorasDia(String dia);
 
     // Seleccionar por id, dia y hora
-    @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE dia" +" = :dia" + " AND hora" + " = :hora"
-            + " AND id_usuario" + " = :id")
-    List<Horas> getHorasIdDiaHora(String id, String hora, String dia);
+    @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE id_usuario" +" = :id" + " AND hora" + " = :hora"
+            + " AND dia" + " = :dia")
+    Horas getHorasIdDiaHora(long id, String hora, String dia);
 
     //insertar
     @Insert

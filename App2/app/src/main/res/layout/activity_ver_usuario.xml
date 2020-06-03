@@ -30,7 +30,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_nombre" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_accion" />
 
     <TextView
         android:id="@+id/textView21"
@@ -42,7 +42,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_hora_e" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_fecha" />
 
     <TextView
         android:id="@+id/textView22"
@@ -54,7 +54,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_hora_s" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_hora" />
 
     <TextView
         android:id="@+id/textView23"
@@ -66,10 +66,10 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_n_usuario" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_motivo" />
 
     <TextView
-        android:id="@+id/tv_nombre"
+        android:id="@+id/tv_accion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="54dp"
@@ -80,7 +80,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <TextView
-        android:id="@+id/tv_hora_e"
+        android:id="@+id/tv_fecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="54dp"
@@ -90,7 +90,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <TextView
-        android:id="@+id/tv_hora_s"
+        android:id="@+id/tv_hora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="54dp"
@@ -100,7 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <TextView
-        android:id="@+id/tv_n_usuario"
+        android:id="@+id/tv_motivo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="54dp"
@@ -110,7 +110,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
     <TextView
-        android:id="@+id/tv_tipo"
+        android:id="@+id/tv_localizacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="54dp"
@@ -129,7 +129,7 @@
         android:clickable="true"
         android:onClick="editar"
         android:padding="0dp"
-        app:layout_constraintStart_toEndOf="@+id/tv_nombre"
+        app:layout_constraintStart_toEndOf="@+id/tv_accion"
         app:layout_constraintTop_toTopOf="parent"
         app:maxImageSize="62dp"
         app:srcCompat="@drawable/edit_round" />
@@ -143,7 +143,7 @@
         android:backgroundTint="@android:color/white"
         android:clickable="true"
         android:onClick="eliminar"
-        app:layout_constraintStart_toEndOf="@+id/tv_nombre"
+        app:layout_constraintStart_toEndOf="@+id/tv_accion"
         app:layout_constraintTop_toBottomOf="@+id/floatingActionButton3"
         app:maxImageSize="62dp"
         app:srcCompat="@drawable/delete_round" />
@@ -159,7 +159,7 @@
         android:clickable="true"
         android:onClick="ver_horas"
         app:backgroundTint="@android:color/white"
-        app:layout_constraintStart_toEndOf="@+id/tv_nombre"
+        app:layout_constraintStart_toEndOf="@+id/tv_accion"
         app:layout_constraintTop_toBottomOf="@+id/floatingActionButton4"
         app:maxImageSize="55dp"
         app:srcCompat="@drawable/list_round" />

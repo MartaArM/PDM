@@ -41,19 +41,19 @@ public class Ver_usuario extends AppCompatActivity {
 
         Usuario us = db.usuarioDao().getUsuarioNombreUsuario(usuario);
 
-        tvnombre = findViewById(R.id.tv_nombre);
+        tvnombre = findViewById(R.id.tv_accion);
         tvnombre.setText(us.getNombre());
 
-        tvhorae = findViewById(R.id.tv_hora_e);
+        tvhorae = findViewById(R.id.tv_fecha);
         tvhorae.setText(us.getHora_entrada());
 
-        tvhoras = findViewById(R.id.tv_hora_s);
+        tvhoras = findViewById(R.id.tv_hora);
         tvhoras.setText(us.getHora_salida());
 
-        tvusuario = findViewById(R.id.tv_n_usuario);
+        tvusuario = findViewById(R.id.tv_motivo);
         tvusuario.setText(usuario);
         
-        tvtipo = findViewById(R.id.tv_tipo);
+        tvtipo = findViewById(R.id.tv_localizacion);
 
         String tipo = us.getTipo();
 

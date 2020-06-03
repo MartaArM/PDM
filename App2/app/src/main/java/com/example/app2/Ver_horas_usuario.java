@@ -163,7 +163,7 @@ public class Ver_horas_usuario extends AppCompatActivity {
         String us = item.toString();
 
         String fecha = us.substring(0, 10);
-        String hora = us.substring(12, 18);
+        String hora = us.substring(13, 18);
 
 
         Intent intent = new Intent(this, Ver_horario.class);
