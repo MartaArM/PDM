@@ -25,6 +25,9 @@ public interface HorasDao {
     @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE dia" +" = :dia")
     List<Horas> getHorasDia(String dia);
 
+    @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE _id" +" = :id")
+    Horas getHorasId(long id);
+
     // Seleccionar por id, dia y hora
     @Query("SELECT * FROM "+Horas.TABLE_NAME+" WHERE id_usuario" +" = :id" + " AND hora" + " = :hora"
             + " AND dia" + " = :dia")
@@ -50,10 +53,11 @@ public interface HorasDao {
     @Update
     int updateEntidad(Horas obj);
 
-    //actualizar Horas
-    @Query("UPDATE " + Horas.TABLE_NAME + " SET dia" + " = :dia" + ", hora" + " = :hora"
-            + " WHERE id_usuario" + " = :id_usuario")
-    int actualizarHoras(String dia, String hora, String id_usuario);
+    @Query("UPDATE " + Horas.TABLE_NAME + " SET dia" + " = :dia" + ", hora" + " = :hora" +
+            ", motivo_tarde" + " = :motivo" + ", accion" + " = :accion" + ", localizacion" + " = :localizacion"
+            + " WHERE _id" + " = :id")
+    int actualizarHoras(String dia, String hora, String motivo, String accion, String localizacion,
+                        long id);
 
     //insertar 2
     @Insert

@@ -171,20 +171,21 @@ public class Opciones extends AppCompatActivity {
 
     // Sacar día actual para fichar
     private String dia_actual() {
-        Date d = new Date();
         Calendar c = Calendar.getInstance();
         int dia = c.get(Calendar.DAY_OF_MONTH);
         int mes = c.get(Calendar.MONTH);
         int anio = c.get(Calendar.YEAR);
 
         String fecha = "";
+        String m = mes + "";
+        String d = dia + "";
         if (mes < 10) {
-            fecha = dia + "/" + "0" + mes + "/" + anio;
+            m = "0" + mes;
         }
-        else {
-            fecha = dia + "/" + mes + "/" + anio;
+        if (dia < 10) {
+            d = "0" + dia;
         }
-
+        fecha = d + "/" + m + "/" + anio;
         return fecha;
     }
 

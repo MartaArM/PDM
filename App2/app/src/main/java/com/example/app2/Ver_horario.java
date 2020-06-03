@@ -95,7 +95,12 @@ public class Ver_horario extends AppCompatActivity {
     }
 
     public void editar_horario(View v){
-
+        Intent intent = new Intent(this, Editar_horario.class);
+        intent.putExtra("name", nombre_us);
+        intent.putExtra("user", usuario);
+        intent.putExtra("id_hora", id_hora);
+        startActivity(intent);
+        finish();
     }
 
     public void eliminar_horario(View v){
