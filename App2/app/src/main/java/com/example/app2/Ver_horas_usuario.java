@@ -121,6 +121,7 @@ public class Ver_horas_usuario extends AppCompatActivity {
 
                 // Set the height of the Item View
                 params.height = 250;
+                params.width= 1000;
 
                 view.setLayoutParams(params);
 
@@ -152,9 +153,9 @@ public class Ver_horas_usuario extends AppCompatActivity {
                 hora = hora + "\n" + "Acción: " + hs.getAccion();
             }
 
-            if (hs.getLocalizacion() != "" && !hs.getLocalizacion().isEmpty()){
+            /*if (hs.getLocalizacion() != "" && !hs.getLocalizacion().isEmpty()){
                 hora = hora + "\n" + "Localización: " + hs.getLocalizacion();
-            }
+            }*/
             horario.add(hora);
         }
     }

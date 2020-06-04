@@ -91,6 +91,7 @@ public class Ver_usuarios extends AppCompatActivity {
 
                     // Set the height of the Item View
                     params.height = 160;
+                    params.width = 1000;
 
                     view.setLayoutParams(params);
 
