@@ -20,7 +20,7 @@ public class CurrentDayDecorator implements DayViewDecorator {
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
-        return true;
+        return dates.contains(day);
     }
 
     @Override
