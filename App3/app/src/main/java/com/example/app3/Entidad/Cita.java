@@ -30,6 +30,9 @@ public class Cita {
     @ColumnInfo(name = "hora_fin")
     private String hora_fin;
 
+    @ColumnInfo(name = "email")
+    private String email;
+
     public long getId() {
         return id;
     }
@@ -66,19 +69,24 @@ public class Cita {
         return hora_fin;
     }
 
-    public void setHora_fin(String hora_fin) {
-        this.hora_fin = hora_fin;
+    public void getEmail(String email) {
+        this.email = email;
+    }
+
+    public String email() {
+        return email;
     }
 
     @Ignore
     public Cita() {
     }
 
-    public Cita(String fecha, String titulo, String hora_inicio, String hora_fin) {
+    public Cita(String fecha, String titulo, String hora_inicio, String hora_fin, String email) {
         this.fecha = fecha;
         this.titulo = titulo;
         this.hora_inicio = hora_inicio;
         this.hora_fin = hora_fin;
+        this.email = email;
     }
 
     public static Cita fromContentValues(ContentValues values) {

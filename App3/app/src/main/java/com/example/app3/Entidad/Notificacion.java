@@ -65,7 +65,7 @@ public class Notificacion {
     public Notificacion() {
     }
 
-    public Notificacion(String fecha, String texto, String hora) {
+    public Notificacion(String fecha, String hora, String texto) {
         this.fecha = fecha;
         this.texto = texto;
         this.hora = hora;
