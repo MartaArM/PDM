@@ -33,6 +33,9 @@ public class Cita {
     @ColumnInfo(name = "email")
     private String email;
 
+    @ColumnInfo(name = "descripcion")
+    private String descripcion;
+
     public long getId() {
         return id;
     }
@@ -69,24 +72,34 @@ public class Cita {
         return hora_fin;
     }
 
-    public void getEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String email() {
+    public String getEmail() {
         return email;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
     }
 
     @Ignore
     public Cita() {
     }
 
-    public Cita(String fecha, String titulo, String hora_inicio, String hora_fin, String email) {
+    public Cita(String fecha, String titulo, String hora_inicio, String hora_fin, String email,
+                String descripcion) {
         this.fecha = fecha;
         this.titulo = titulo;
         this.hora_inicio = hora_inicio;
         this.hora_fin = hora_fin;
         this.email = email;
+        this.descripcion = descripcion;
     }
 
     public static Cita fromContentValues(ContentValues values) {

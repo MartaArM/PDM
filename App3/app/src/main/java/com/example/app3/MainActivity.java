@@ -1,9 +1,13 @@
 package com.example.app3;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,14 +19,19 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
     MaterialCalendarView mycal;
     String fecha;
+    List<String> mis_citas;
+    ArrayAdapter<String> arrayAdapter;
+    private ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
         mycal.setSelectionColor(Color.parseColor("#80b3ff"));
         fecha = dia_actual();
-
+        lv = findViewById(R.id.lv_citas);
+        mis_citas = new ArrayList<String>();
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mis_citas);
+        lv.setAdapter(arrayAdapter);
+        // Evento para coger la fecha al pulsarla en el calendario
         mycal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -75,6 +88,16 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String f = df.format(c);
         return f;
+
+    }
+
+    public void pedir_cita(View v) {
+        Intent intent = new Intent(this, Pedir_cita.class);
+        intent.putExtra("fecha", fecha);
+        startActivity(intent);
+    }
+
+    public void accesoAdministrador(View v) {
 
     }
 }

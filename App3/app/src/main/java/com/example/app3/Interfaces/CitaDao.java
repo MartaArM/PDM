@@ -58,9 +58,9 @@ public interface CitaDao {
 
     //actualizar cita
     @Query("UPDATE " + Cita.TABLE_NAME + " SET titulo" + " = :titulo" + ", hora_inicio" + " = :hora_ini_n"
-            + ", fecha" + " = :fecha" +", hora_fin" + " = :hora_f" + " WHERE _id" +
+            + ", fecha" + " = :fecha" +", hora_fin" + " = :hora_f" +", descripcion" + " = :descripcion" + " WHERE _id" +
             " = :id")
-    int actualizarCita(String titulo, String hora_ini_n, String fecha, String hora_f, long id);
+    int actualizarCita(String titulo, String hora_ini_n, String fecha, String hora_f, String descripcion, long id);
 
     // Actualizar solo título
     @Query("UPDATE " + Cita.TABLE_NAME + " SET titulo" + " = :titulo" + " WHERE _id" +
