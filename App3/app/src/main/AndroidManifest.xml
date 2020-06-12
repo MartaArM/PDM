@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginAdministrador"></activity>
+        <activity android:name=".Administracion"></activity>
+        <activity
+            android:name=".ui.login.Administracion"
+            android:label="@string/title_activity_administracion" />
+        <activity android:name=".LoginAdministrador" />
         <activity android:name=".Pedir_cita" />
         <activity android:name=".MainActivity">
             <intent-filter>

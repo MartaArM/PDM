@@ -25,6 +25,7 @@
         android:autoText="true"
         android:background="@android:color/white"
         android:backgroundTint="@android:color/white"
+        android:onClick="accesoAdministrador"
         android:text="Acceder como administrador"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
