@@ -15,7 +15,7 @@ import com.example.app3.Entidad.Usuario;
 public class LoginAdministrador extends AppCompatActivity {
 
     private AppDatabase db;
-    private EditText nombre, clave;
+    private EditText enombre, eclave;
     private TextView error_us, error_cl;
 
     @Override
@@ -35,17 +35,18 @@ public class LoginAdministrador extends AppCompatActivity {
     }
 
     public void acceder(View v) {
-        nombre = findViewById(R.id.et_usuario);
-        clave = findViewById(R.id.et_clave);
+        enombre = findViewById(R.id.et_usuario);
+        eclave = findViewById(R.id.et_clave);
 
-        Usuario u = db.usuarioDao().getUsuarioNombreUsuario(nombre.getText().toString());
+        Usuario u = db.usuarioDao().getUsuarioNombreUsuario(enombre.getText().toString());
 
         if (u == null) {
             error_us.setText("El nombre de usuario no existe");
         }
         else {
-            if (!clave.equals(u.getClave())) {
-                error_cl.setText("La clave no es correcta");
+            String clave = eclave.getText().toString();
+            if (!clave.equals(u.getClave()) ) {
+                error_cl.setText("La clave no es correcta.");
             }
             else {
                 Intent intent = new Intent(this, Administracion.class);
