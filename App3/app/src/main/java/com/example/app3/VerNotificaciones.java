@@ -3,6 +3,7 @@ package com.example.app3;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class VerNotificaciones extends AppCompatActivity {
 
-    private List<String> notificaciones;
+    public List<String> notificaciones;
     private ArrayAdapter<String> arrayAdapter;
     private AppDatabase db;
     private ListView lv_not;
@@ -91,5 +92,17 @@ public class VerNotificaciones extends AppCompatActivity {
         int index = not.indexOf("ID");
 
         String id = not.substring(index+3);
+        long ide = Long.parseLong(id);
+
+        Intent intent = new Intent(this, VerNotificacion.class);
+        intent.putExtra("id", ide);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        rellenar_lista();
     }
 }
