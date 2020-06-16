@@ -23,5 +23,23 @@
             android:backgroundTint="@android:color/white"
             android:text="Ver notificaciones"
             android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/ver_notificaciones2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:text="Ver calendario"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/ver_notificaciones3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:text="Agregar usuario administrador"
+            android:textAllCaps="false" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
