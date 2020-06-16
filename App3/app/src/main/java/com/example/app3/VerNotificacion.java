@@ -71,7 +71,14 @@ public class VerNotificacion extends AppCompatActivity {
     }
 
     public void aprobar(View v) {
-
+        Intent intent = new Intent(this, AgregarCita.class);
+        intent.putExtra("nombre", nombre);
+        intent.putExtra("fecha", fecha);
+        intent.putExtra("hora", hora);
+        intent.putExtra("descripcion", descripcion);
+        intent.putExtra("email", email);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 
     public void denegar(View v) {

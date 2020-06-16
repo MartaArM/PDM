@@ -15,6 +15,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
         <Button
             android:id="@+id/ver_notificaciones"
             android:layout_width="match_parent"
@@ -42,5 +47,6 @@
             android:backgroundTint="@android:color/white"
             android:text="Agregar usuario administrador"
             android:textAllCaps="false" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

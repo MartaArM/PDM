@@ -2,25 +2,24 @@ package com.example.app3;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import com.example.app3.Database.AppDatabase;
+import com.example.app3.Entidad.Cita;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.text.SimpleDateFormat;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView lv;
     private AppDatabase db;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,14 +77,32 @@ public class MainActivity extends AppCompatActivity {
                 a = date.getYear() + "";
 
                 fecha = d + "/" + m + "/" + a;
+
+                //List<Cita> citas = db.citaDao().getCitaFecha(fecha);
+                List<Cita> citas = db.citaDao().getCitaFecha(fecha);
+                mis_citas.clear(); // limpiar array
+                for(Cita c : citas) {
+                    String cita = c.getHora_inicio() + "-" + c.getHora_fin() + " Ocupado";
+                    mis_citas.add(cita);
+                }
+
+                arrayAdapter.notifyDataSetChanged(); // cambiar la lista
             }
         });
-        /*CalendarDay c = CalendarDay.from(2020, 6, 6);
-        CalendarDay c1 = CalendarDay.today();
+
+        List<Cita> citas = db.citaDao().getAllCitas();
+        CalendarDay cd;
         final ArrayList<CalendarDay> cs = new ArrayList<>();
-        cs.add(c);
-        cs.add(c1);
-        mycal.addDecorator(new CurrentDayDecorator(Color.RED, cs));*/
+        for(Cita c : citas) {
+            String date = c.getFecha();
+            String d = date.substring(0, 2);
+            String m = date.substring(3, 5);
+            String a = date.substring(6);
+
+            cd = CalendarDay.from(Integer.parseInt(a), Integer.parseInt(m), Integer.parseInt(d));
+            cs.add(cd);
+        }
+        mycal.addDecorator(new CurrentDayDecorator(Color.BLUE, cs));
     }
 
     private String dia_actual() {
