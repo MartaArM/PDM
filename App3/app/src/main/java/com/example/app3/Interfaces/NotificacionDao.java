@@ -14,7 +14,7 @@ public interface NotificacionDao {
 
     //seleccionar todo
     @Query("SELECT * FROM "+ Notificacion.TABLE_NAME)
-    List<Notificacion> getAllNotificacions();
+    List<Notificacion> getAllNotificaciones();
 
     // seleccionar por fecha
     @Query("SELECT * FROM "+Notificacion.TABLE_NAME+" WHERE fecha" +" = :fecha")

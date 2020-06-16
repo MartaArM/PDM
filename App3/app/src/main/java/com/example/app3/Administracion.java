@@ -3,6 +3,7 @@ package com.example.app3;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -17,7 +18,8 @@ public class Administracion extends AppCompatActivity {
     }
 
     public void ver_notificaciones(View v) {
-
+        Intent intent = new Intent(this, VerNotificaciones.class);
+        startActivity(intent);
     }
 
 }

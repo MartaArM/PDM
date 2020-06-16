@@ -112,7 +112,7 @@ public class Pedir_cita extends AppCompatActivity {
         }
 
         if (guardar) {
-            String texto = titulo + "\n" + "Fecha: " + fecha + "\n" + "Hora: " + hora + "\n" + "Descripcion: " + descripcion
+            String texto = "Nombre: " + titulo + "\n" + "Fecha: " + fecha + "\n" + "Hora: " + hora + "\n" + "Descripcion: " + descripcion
                     + "\n" + "Email: " + email;
 
             Notificacion n = new Notificacion(dia_actual(), hora_actual(), texto);

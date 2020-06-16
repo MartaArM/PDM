@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:backgroundTint="@android:color/white"
+            android:onClick="ver_notificaciones"
             android:text="Ver notificaciones"
             android:textAllCaps="false" />
 
