@@ -27,12 +27,12 @@ public class VerCita extends AppCompatActivity {
         Intent i = getIntent();
         id = i.getLongExtra("id", 0);
 
-        tvnombre = findViewById(R.id.tv_nombre);
-        tvfecha = findViewById(R.id.tv_fecha);
-        tvhora = findViewById(R.id.tv_hora);
-        tvhoraf = findViewById(R.id.tv_hora_f);
-        tvdescripcion = findViewById(R.id.tv_descripcion);
-        tvemail = findViewById(R.id.tv_email);
+        tvnombre = findViewById(R.id.et_nombre);
+        tvfecha = findViewById(R.id.et_fecha);
+        tvhora = findViewById(R.id.et_hora);
+        tvhoraf = findViewById(R.id.et_hora_f);
+        tvdescripcion = findViewById(R.id.et_descripcion);
+        tvemail = findViewById(R.id.et_email);
 
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
@@ -77,8 +77,11 @@ public class VerCita extends AppCompatActivity {
     }
 
     public void editarCita(View v){
-        
+        Intent intent = new Intent(this, EditarCita.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
+
     private void mostrarMensajeCerrar(String mensaje){
         AlertDialog.Builder builder = new AlertDialog.Builder(VerCita.this);
 
@@ -92,5 +95,12 @@ public class VerCita extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        rellenar_datos();
     }
 }

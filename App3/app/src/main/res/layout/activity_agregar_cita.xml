@@ -37,7 +37,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_nombre" />
+            app:layout_constraintTop_toBottomOf="@+id/et_nombre" />
 
         <TextView
             android:id="@+id/textView4"
@@ -50,7 +50,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_fecha" />
+            app:layout_constraintTop_toBottomOf="@+id/et_fecha" />
 
         <TextView
             android:id="@+id/textView2"
@@ -63,7 +63,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_hora" />
+            app:layout_constraintTop_toBottomOf="@+id/et_hora" />
 
         <TextView
             android:id="@+id/textView5"
@@ -89,10 +89,10 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_descripcion" />
+            app:layout_constraintTop_toBottomOf="@+id/et_descripcion" />
 
         <TextView
-            android:id="@+id/tv_nombre"
+            android:id="@+id/et_nombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -102,7 +102,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <TextView
-            android:id="@+id/tv_fecha"
+            android:id="@+id/et_fecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -112,7 +112,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView55" />
 
         <TextView
-            android:id="@+id/tv_hora"
+            android:id="@+id/et_hora"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -122,7 +122,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <TextView
-            android:id="@+id/tv_descripcion"
+            android:id="@+id/et_descripcion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -132,7 +132,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <TextView
-            android:id="@+id/tv_email"
+            android:id="@+id/et_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
@@ -153,7 +153,7 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_email" />
+            app:layout_constraintTop_toBottomOf="@+id/et_email" />
 
         <EditText
             android:id="@+id/et_hora"

@@ -28,11 +28,11 @@ public class VerNotificacion extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
 
-        tvnombre = findViewById(R.id.tv_nombre);
-        tvfecha = findViewById(R.id.tv_fecha);
-        tvhora = findViewById(R.id.tv_hora);
-        tvdescripcion = findViewById(R.id.tv_descripcion);
-        tvemail = findViewById(R.id.tv_email);
+        tvnombre = findViewById(R.id.et_nombre);
+        tvfecha = findViewById(R.id.et_fecha);
+        tvhora = findViewById(R.id.et_hora);
+        tvdescripcion = findViewById(R.id.et_descripcion);
+        tvemail = findViewById(R.id.et_email);
 
         intent = getIntent();
         id = intent.getLongExtra("id", 0);
