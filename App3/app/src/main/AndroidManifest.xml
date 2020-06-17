@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VerCita"></activity>
+        <activity android:name=".EditarCita"></activity>
+        <activity android:name=".VerCita" />
         <activity android:name=".AgregarCita" />
         <activity android:name=".VerNotificacion" />
         <activity android:name=".VerNotificaciones" />
