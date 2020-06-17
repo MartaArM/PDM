@@ -38,7 +38,9 @@ public class LoginAdministrador extends AppCompatActivity {
         enombre = findViewById(R.id.et_usuario);
         eclave = findViewById(R.id.et_clave);
 
-        Usuario u = db.usuarioDao().getUsuarioNombreUsuario(enombre.getText().toString());
+        String user = enombre.getText().toString();
+
+        Usuario u = db.usuarioDao().getUsuarioNombreUsuario(user);
 
         if (u == null) {
             error_us.setText("El nombre de usuario no existe");
@@ -50,6 +52,7 @@ public class LoginAdministrador extends AppCompatActivity {
             }
             else {
                 Intent intent = new Intent(this, Administracion.class);
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
         }

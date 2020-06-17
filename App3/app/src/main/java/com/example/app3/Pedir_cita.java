@@ -8,10 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.app3.Database.AppDatabase;
+import com.example.app3.Entidad.Cita;
 import com.example.app3.Entidad.Notificacion;
 
 import java.text.ParseException;
@@ -24,7 +26,10 @@ public class Pedir_cita extends AppCompatActivity {
     AppDatabase db;
     private String fecha;
     private TextView tvtitulo, error1, error2, error3;
-    private EditText etTitulo, etHora, etDescripcion, etEmail;
+    private EditText etTitulo, etHora, etHoraF, etDescripcion, etEmail;
+    String user;
+    Button btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,7 @@ public class Pedir_cita extends AppCompatActivity {
 
         intent = getIntent();
         fecha = intent.getStringExtra("fecha");
+        user = intent.getStringExtra("user");
 
         tvtitulo = findViewById(R.id.tv_titulo);
         try {
@@ -50,6 +56,28 @@ public class Pedir_cita extends AppCompatActivity {
         error1.setText("");
         error2.setText("");
         error3.setText("");
+
+        btn = findViewById(R.id.button2);
+        etHoraF = findViewById(R.id.et_hora_fin);
+
+        if (user != null) {
+            btn.setText("Guardar");
+        }
+        else {
+            etHoraF.setVisibility(View.GONE);
+        }
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user == null){
+                    enviarNotificiacion(v);
+                }
+                else {
+                    guardar(v);
+                }
+            }
+        });
 
     }
 
@@ -120,6 +148,46 @@ public class Pedir_cita extends AppCompatActivity {
             db.notificacionDao().aniadir(n);
             mostrarMensajeCerrar("La solicitud se ha hecho con éxito. Le llegará un correo confirmando " +
                     "o denegando la cita.");
+        }
+    }
+
+    public void guardar(View v) {
+        etTitulo = findViewById(R.id.et_titulo);
+        etHora = findViewById(R.id.et_hora);
+        etEmail = findViewById(R.id.et_email);
+
+        boolean guardar = false;
+
+        String titulo = etTitulo.getText().toString();
+        if (titulo.isEmpty() || titulo == "") {
+            error1.setText("El nombre es obligatorio");
+            guardar = false;
+        }
+        else {
+            guardar = true;
+        }
+
+        String hora = etHora.getText().toString();
+        if (hora.isEmpty() || hora == "") {
+            error2.setText("La hora es obligatoria");
+            guardar = false;
+        }
+        else {
+            guardar = true;
+        }
+
+        String hora_f = etHoraF.getText().toString();
+
+        etDescripcion = findViewById(R.id.et_descripcion);
+        String descripcion = etDescripcion.getText().toString();
+
+        String email = etEmail.getText().toString();
+
+        if (guardar) {
+            Cita c = new Cita(fecha, titulo, hora, hora_f, email, descripcion);
+
+            db.citaDao().insert(c);
+            mostrarMensajeCerrar("La cita se ha guardado con éxito.");
         }
     }
 
