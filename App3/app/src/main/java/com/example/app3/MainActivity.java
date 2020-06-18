@@ -17,6 +17,7 @@ import androidx.room.Room;
 
 import com.example.app3.Database.AppDatabase;
 import com.example.app3.Entidad.Cita;
+import com.example.app3.Entidad.Usuario;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;

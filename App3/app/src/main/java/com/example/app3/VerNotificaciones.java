@@ -80,6 +80,7 @@ public class VerNotificaciones extends AppCompatActivity {
             }
         }
         else {
+            notificaciones.clear();
             notificaciones.add("No hay notificaciones");
             lv_not.setClickable(false);
         }
