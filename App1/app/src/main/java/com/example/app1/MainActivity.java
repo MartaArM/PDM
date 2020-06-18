@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.speech.RecognizerIntent;
@@ -14,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +27,9 @@ import com.example.app1.Database.AppDatabase;
 import com.example.app1.Entidad.Evento;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.JsonElement;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,7 +49,7 @@ import ai.api.model.Result;
 
 
 public class MainActivity extends AppCompatActivity implements AIListener {
-    private CalendarView calendario;
+    private MaterialCalendarView calendario;
     private ListView lv;
     private FloatingActionButton button_bot;
     public String mes, anio, dia;
@@ -101,47 +104,39 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 AppDatabase.class, "database-name").allowMainThreadQueries().fallbackToDestructiveMigration().build();
 
         // Método de cambio de fecha en calendarview
-        calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        calendario.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                anio = Integer.toString(year);
-                // Corregir formato del mes y día
-                SimpleDateFormat dmd = new SimpleDateFormat("MM");
-                Date m = null;
-                try {
-                    m = dmd.parse(Integer.toString(month));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                SimpleDateFormat dms = new SimpleDateFormat("MM");
-                mes = dms.format(m);
-                SimpleDateFormat ddd = new SimpleDateFormat("dd");
-                Date d = null;
-                try {
-                     d = ddd.parse(Integer.toString(dayOfMonth));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                SimpleDateFormat dds = new SimpleDateFormat("dd");
-                dia = dds.format(d);
-                String fecha_aux = dia + "/" + mes + "/" + anio;
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                int d, m;
 
-                List<Evento> events = db.eventoDao().getEventoFecha(fecha_aux);
-                your_array_list.clear(); // limpiar array
-                for(Evento e : events) {
-                    String ev = e.getHora_inicio() + "-" + e.getHora_fin()+"\n"+e.getTitulo()+"\n";
-                    your_array_list.add(ev);
+                d = date.getDay();
+                if (d < 10) {
+                    dia = "0" + d;
+                }
+                else {
+                    dia = d + "";
                 }
 
-                arrayAdapter.notifyDataSetChanged(); // cambiar la lista
+                m = date.getMonth();
+                if (m < 10) {
+                    mes = "0" + m;
+                }
+                else {
+                    mes = m + "";
+                }
 
+                anio = date.getYear() + "";
+
+                String fecha = dia + "/" + mes + "/" + anio;
+
+                rellenar_lista(fecha);
             }
         });
         // En que evento del dia marcado estoy señalando
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                 Object item = parent.getItemAtPosition(position);
+                Object item = parent.getItemAtPosition(position);
                 verEvento(item);
             }
         });
@@ -177,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             }
         });
 
+        puntos();
 
     }
 
@@ -241,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
                 Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b, "");
                 db.eventoDao().aniadir(ev_a);
+                puntos();
+                rellenar_lista(fecha_a);
                 myBot.speak("Evento añadido", TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
                     Thread.sleep(3000);
@@ -250,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             } else { // Hay eventos
                 Evento ev_a = new Evento(fecha_a, titulo_a, hora_a, hora_b, "");
                 db.eventoDao().aniadir(ev_a);
-                myBot.speak("Se ha añadido el evento, pero ya había una cita en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
+                myBot.speak("Se ha añadido el evento, pero ya había una evento en esa fecha. Puede cambiarlo si desea.", TextToSpeech.QUEUE_FLUSH, null, null);
                 try {
                     Thread.sleep(9000);
                 } catch (InterruptedException e) {
@@ -283,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 String d = fecha_a.substring(8);
                 String m = fecha_a.substring(5, 7);
                 Integer mes_i = Integer.parseInt(m);
-                mes_i -= 1;
+                //mes_i -= 1;
 
                 if (mes_i < 10) {
                     m = "0" + mes_i.toString();
@@ -347,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 String d = fecha_a.substring(8);
                 String m = fecha_a.substring(5, 7);
                 Integer mes_i = Integer.parseInt(m);
-                mes_i -= 1;
+                //mes_i -= 1;
 
                 if (mes_i < 10) {
                     m = "0" + mes_i.toString();
@@ -389,6 +387,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             else {
                 db.eventoDao().deleteByHora(fecha_a, hora_a, titulo_a);
                 myBot.speak("Evento eliminado", TextToSpeech.QUEUE_FLUSH, null, null);
+                puntos();
+                rellenar_lista(fecha_a);
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 String d = fecha_a.substring(8);
                 String m = fecha_a.substring(5, 7);
                 Integer mes_i = Integer.parseInt(m);
-                mes_i -= 1;
+                //mes_i -= 1;
 
                 if (mes_i < 10) {
                     m = "0" + mes_i.toString();
@@ -466,6 +466,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 else {
                     db.eventoDao().actualizarTitulo(titulo_edit, fecha_a, hora_a, titulo_a);
                     myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    puntos();
+                    rellenar_lista(fecha_a);
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
@@ -502,6 +504,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 else {
                     db.eventoDao().actualizarHoraIni(hora_ini, fecha_a, hora_a, titulo_a);
                     myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    puntos();
+                    rellenar_lista(fecha_a);
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
@@ -533,6 +537,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 else {
                     db.eventoDao().actualizarHoraFin(hora_fin, fecha_a, hora_a, titulo_a);
                     myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    puntos();
+                    rellenar_lista(fecha_a);
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
@@ -575,6 +581,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 else {
                     db.eventoDao().actualizarFecha(fecha_act, fecha_a, hora_a, titulo_a);
                     myBot.speak("Evento actualizado.", TextToSpeech.QUEUE_FLUSH, null, null);
+                    puntos();
+                    rellenar_lista(fecha_a);
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
@@ -744,5 +752,30 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         return calendar.getTime().toString().substring(11, 16);
     }
 
+    private void rellenar_lista(String fecha) {
+        List<Evento> events = db.eventoDao().getEventoFecha(fecha);
+        your_array_list.clear(); // limpiar array
+        for(Evento e : events) {
+            String ev = e.getHora_inicio() + "-" + e.getHora_fin()+"\n"+e.getTitulo()+"\n";
+            your_array_list.add(ev);
+        }
 
+        arrayAdapter.notifyDataSetChanged(); // cambiar la lista
+    }
+
+    private void puntos() {
+        List<Evento> eventos = db.eventoDao().getAllEventos();
+        CalendarDay cd;
+        final ArrayList<CalendarDay> cs = new ArrayList<>();
+        for(Evento c : eventos) {
+            String date = c.getFecha();
+            String d = date.substring(0, 2);
+            String m = date.substring(3, 5);
+            String a = date.substring(6);
+
+            cd = CalendarDay.from(Integer.parseInt(a), Integer.parseInt(m), Integer.parseInt(d));
+            cs.add(cd);
+        }
+        calendario.addDecorator(new CurrentDayDecorator(Color.BLUE, cs));
+    }
 }

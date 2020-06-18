@@ -35,6 +35,12 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -51,12 +57,14 @@ dependencies {
     implementation 'ai.api:libai:1.6.12'
     implementation 'ai.api:sdk:2.0.7@aar'
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.google.cloud:google-cloud-dialogflow:0.67.0-alpha'
+    //implementation 'com.google.cloud:google-cloud-dialogflow:0.67.0-alpha'
     implementation 'io.grpc:grpc-okhttp:1.15.1'
     implementation 'com.google.code.gson:gson:2.7'
     implementation 'commons-io:commons-io:2.4'
 
     annotationProcessor 'org.apache.logging.log4j:log4j-core:2.2'
     implementation 'com.google.android.material:material:1.1.0'
+
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
 }
 
