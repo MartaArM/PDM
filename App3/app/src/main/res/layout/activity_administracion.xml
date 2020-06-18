@@ -18,7 +18,7 @@
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="20dp" />
 
         <Button
             android:id="@+id/ver_notificaciones"
@@ -46,7 +46,18 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:backgroundTint="@android:color/white"
+            android:onClick="agregar_usuario"
             android:text="Agregar usuario administrador"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/ver_notificaciones4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:onClick="ver_usuarios"
+            android:text="Ver usuarios administradores"
             android:textAllCaps="false" />
 
     </LinearLayout>

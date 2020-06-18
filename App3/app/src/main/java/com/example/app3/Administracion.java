@@ -32,4 +32,14 @@ public class Administracion extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void agregar_usuario(View v) {
+        Intent intent = new Intent(this, AgregarUsuario.class);
+        startActivity(intent);
+    }
+
+    public void ver_usuarios(View v){
+        Intent intent = new Intent(this, VerUsuarios.class);
+        startActivity(intent);
+    }
+
 }

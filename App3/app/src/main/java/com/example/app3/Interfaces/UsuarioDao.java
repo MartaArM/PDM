@@ -47,6 +47,11 @@ public interface UsuarioDao {
              + " WHERE _id" + " = :id")
     int actualizarUsuario(String nombre_usuario, String clave, long id);
 
+    //actualizar Usuario
+    @Query("UPDATE " + Usuario.TABLE_NAME + " SET nombre_usuario" + " = :nombre_usuario" + ", clave" + " = :clave"
+            + " WHERE nombre_usuario" + " = :nombre")
+    int actualizarUsuarioNombre(String nombre_usuario, String clave, String nombre);
+
     //insertar 2
     @Insert
     long insert(Usuario usuarios);
