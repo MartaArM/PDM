@@ -103,12 +103,14 @@ public class VerEvento extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
         db.eventoDao().deleteByHora(valores.get(0), valores.get(1), valores.get(3));
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
+        /*Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);*/
+        finish();
     }
     public void editarEvento(View view) {
         Intent intent = new Intent(this, EditarEvento.class);
         intent.putStringArrayListExtra("valores", valores);
         startActivity(intent);
+        finish();
     }
 }

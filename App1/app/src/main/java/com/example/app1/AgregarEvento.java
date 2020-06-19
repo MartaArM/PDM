@@ -58,7 +58,6 @@ public class AgregarEvento extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date1);
-        calendar.add(Calendar.MONTH, 1);
         date1 = calendar.getTime();
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
@@ -83,7 +82,7 @@ public class AgregarEvento extends AppCompatActivity {
         String dia = fecha.get(0);
         String mes = fecha.get(1);
         Integer mes_i = Integer.parseInt(mes);
-        mes_i+=1;
+        //mes_i+=1;
 
         if (mes_i < 10) {
             mes = "0" + mes_i.toString();
