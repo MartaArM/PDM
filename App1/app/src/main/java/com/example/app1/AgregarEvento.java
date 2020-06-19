@@ -131,7 +131,8 @@ public class AgregarEvento extends AppCompatActivity {
 
         db.eventoDao().aniadir(e);
 
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
+        /*Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);*/
+        finish();
     }
 }

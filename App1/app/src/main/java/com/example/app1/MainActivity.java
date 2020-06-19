@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().fallbackToDestructiveMigration().build();
 
+        CalendarDay c = CalendarDay.from(Integer.parseInt(anio), Integer.parseInt(mes), Integer.parseInt(dia));
+        calendario.setDateSelected(c, true);
         // Método de cambio de fecha en calendarview
         calendario.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -777,5 +779,12 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             cs.add(cd);
         }
         calendario.addDecorator(new CurrentDayDecorator(Color.BLUE, cs));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        rellenar_lista(dia + "/" + mes + "/" + anio);
+        puntos();
     }
 }
