@@ -35,7 +35,7 @@ public class lugar extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
 
-        i = new Intent(this, Administracion.class);
+        i = new Intent(this, Opciones.class);
     }
 
     public void lugar(View view){
@@ -71,6 +71,7 @@ public class lugar extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         int dia = c.get(Calendar.DAY_OF_MONTH);
         int mes = c.get(Calendar.MONTH);
+        mes = mes+1;
         int anio = c.get(Calendar.YEAR);
 
         String fecha = "";
@@ -88,10 +89,25 @@ public class lugar extends AppCompatActivity {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
         calendar.setTime(date);   // assigns calendar to given date
+        String h, m;
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hour < 10) {
+            h = "0" + hour;
+        }
+        else {
+            h = hour + "";
+        }
+
         int min = calendar.get(Calendar.MINUTE);
 
-        String hora = hour + ":" + min;
+        if (min < 10) {
+            m = "0" + min;
+        }
+        else {
+            m = min + "";
+        }
+
+        String hora = h + ":" + m;
         return hora;
     }
 
@@ -103,8 +119,8 @@ public class lugar extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                i.putExtra("name", user_n);
-                startActivity(i);
+                //i.putExtra("name", user_n);
+                //startActivity(i);
                 finish();
             }
         });

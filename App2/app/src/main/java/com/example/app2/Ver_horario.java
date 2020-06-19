@@ -116,9 +116,9 @@ public class Ver_horario extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                i.putExtra("name", usuario);
+                /*i.putExtra("name", usuario);
                 i.putExtra("user", nombre_us);
-                startActivity(i);
+                startActivity(i);*/
                 finish();
             }
         });

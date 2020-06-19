@@ -104,8 +104,8 @@ public class Ver_usuario extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                i.putExtra("name", user_n);
-                startActivity(i);
+                //i.putExtra("name", user_n);
+                //startActivity(i);
                 finish();
             }
         });

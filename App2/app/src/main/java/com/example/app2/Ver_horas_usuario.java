@@ -174,4 +174,10 @@ public class Ver_horas_usuario extends AppCompatActivity {
         intent.putExtra("hora", hora);
         startActivity(intent);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        llenarHorario();
+    }
 }

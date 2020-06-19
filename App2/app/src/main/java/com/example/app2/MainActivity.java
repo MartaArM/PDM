@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().
                 fallbackToDestructiveMigration().build();
+        //db.horasDao().deleteAll();
+
     }
 
     public void comprobarDatos(View view) {

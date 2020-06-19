@@ -174,6 +174,7 @@ public class Opciones extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         int dia = c.get(Calendar.DAY_OF_MONTH);
         int mes = c.get(Calendar.MONTH);
+        mes+=1;
         int anio = c.get(Calendar.YEAR);
 
         String fecha = "";

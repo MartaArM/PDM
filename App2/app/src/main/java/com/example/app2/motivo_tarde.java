@@ -53,7 +53,7 @@ public class motivo_tarde extends AppCompatActivity {
                 break;
         }
         i = getIntent();
-        i1 = new Intent(this, Administracion.class);
+        i1 = new Intent(this, Opciones.class);
         user_n = i.getStringExtra("name");
         Usuario us = db.usuarioDao().getUsuarioNombreUsuario(user_n);
         Horas h = new Horas(Long.toString(us.getId()), dia_actual(), hora_actual(), motivo,
@@ -67,6 +67,7 @@ public class motivo_tarde extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         int dia = c.get(Calendar.DAY_OF_MONTH);
         int mes = c.get(Calendar.MONTH);
+        mes+=1;
         int anio = c.get(Calendar.YEAR);
 
         String fecha = "";
@@ -116,8 +117,8 @@ public class motivo_tarde extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                i.putExtra("name", user_n);
-                startActivity(i);
+                //i.putExtra("name", user_n);
+                //startActivity(i1);
                 finish();
             }
         });
