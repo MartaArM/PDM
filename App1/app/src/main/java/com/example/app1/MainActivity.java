@@ -105,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
         CalendarDay c = CalendarDay.from(Integer.parseInt(anio), Integer.parseInt(mes), Integer.parseInt(dia));
         calendario.setDateSelected(c, true);
-        // Método de cambio de fecha en calendarview
+
+        // Método de cambio de fecha en calendario
         calendario.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 rellenar_lista(fecha);
             }
         });
-        // En que evento del dia marcado estoy señalando
+        // Que hacer cuando marco un elemento de la lista
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
             }
         });
 
+        // Dibujar los puntos en el calendario
         puntos();
 
     }
@@ -182,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         String fecha = dia + "/" + mes + "/" + anio;
         return fecha;
     }
+
     // Se envía la fecha a la actividad de añadir
     public void enviarFecha(View view) {
         array_fecha = new ArrayList<String>();
@@ -193,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         intent.putStringArrayListExtra("fecha", array_fecha);
         startActivity(intent);
     }
+
     // Abre la actividad para ver el evento, para poder eliminarlo o editarlo
     public void verEvento(Object item) {
         String evento = item.toString();
@@ -210,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         intent.putStringArrayListExtra("valores", valores);
         startActivity(intent);
     }
+
     // Por si el usuario no cambia de fecha
     public void fecha_actual() {
         Date c = Calendar.getInstance().getTime();
@@ -222,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         anio = df.format(c);
     }
 
+    // Pide permiso para poder grabar
     private void comprobarPermisos() {
         if (!(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
                 PackageManager.PERMISSION_GRANTED)) {
@@ -229,11 +235,13 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         }
     }
 
+    // Coger los datos que envia dialogflow con el bot
     @Override
     public void onResult(AIResponse result) {
         Result resultado = result.getResult();
         String action = resultado.getAction();
-        // Si el usuario decide agrgar evento
+
+        // Sí a agregar el evento que he dicho
         if (action.equals("QuestionAddEvent.QuestionAddEvent-yes")) {
             // No hay eventos
             if (db.eventoDao().getEventoFechayHora(fecha_a, hora_a).isEmpty()) {
@@ -257,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     e.printStackTrace();
                 }
             }
-        }
+        } // "Agregar evento..."
         else if(action.equals("addevent-action")) {
             if (resultado.getParameters() != null && !resultado.getParameters().isEmpty()) {
                 //Coger los valores de los parametros
@@ -307,7 +315,6 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                 }
                 hora_b = sumarMinutos(dt);
             }
-
 
             if (!resultado.getFulfillment().getSpeech().isEmpty()){
                 myBot.speak(resultado.getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null, null);
@@ -658,7 +665,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
                     }
                 }
             }
-        }
+        } // No necesitan manejo de datos, solo que devuelva el texto que dice el bot de dialogflow
         else if (action.equals("QuestionAddEvent.QuestionAddEvent-no") ||
                 action.equals("QuestionDeleteEvent.QuestionDeleteEvent-no") ||
                 action.equals("QuestionEditEvent.QuestionEditEvent-no") ||
@@ -703,7 +710,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
 
     }
 
-    // Convertir mes en cadena a mes en número
+    // Convertir mes en numero a mes en cadena
     private String mes(String mes) {
         String mes_num = "";
         if (mes.equals("00")) {
@@ -754,6 +761,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         return calendar.getTime().toString().substring(11, 16);
     }
 
+    // Rellenar el list view de los eventos
     private void rellenar_lista(String fecha) {
         List<Evento> events = db.eventoDao().getEventoFecha(fecha);
         your_array_list.clear(); // limpiar array
@@ -765,6 +773,7 @@ public class MainActivity extends AppCompatActivity implements AIListener {
         arrayAdapter.notifyDataSetChanged(); // cambiar la lista
     }
 
+    // Dibujar los puntos del calendario si hay eventos
     private void puntos() {
         List<Evento> eventos = db.eventoDao().getAllEventos();
         CalendarDay cd;

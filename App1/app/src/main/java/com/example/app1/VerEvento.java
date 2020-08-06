@@ -43,6 +43,7 @@ public class VerEvento extends AppCompatActivity {
         ponerDescripcion();
     }
 
+    // Poner fecha en textview
     public void ponerFecha() throws ParseException {
         tvFecha = findViewById(R.id.tvfecha);
         Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(valores.get(0));
@@ -98,15 +99,13 @@ public class VerEvento extends AppCompatActivity {
         }
     }
 
-
     public void eliminarEvento(View view){
         db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
         db.eventoDao().deleteByHora(valores.get(0), valores.get(1), valores.get(3));
-        /*Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);*/
         finish();
     }
+
     public void editarEvento(View view) {
         Intent intent = new Intent(this, EditarEvento.class);
         intent.putStringArrayListExtra("valores", valores);

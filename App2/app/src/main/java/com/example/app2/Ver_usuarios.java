@@ -41,6 +41,7 @@ public class Ver_usuarios extends AppCompatActivity {
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
         mostrarUsuarios();
 
+        // Que objeto de la lista de usuarios eligo
         lv_usuarios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -50,6 +51,7 @@ public class Ver_usuarios extends AppCompatActivity {
         });
 
         sv_busqueda = findViewById(R.id.busqueda);
+
         // Para buscar un usuario por nombre o nombre de usuario
         sv_busqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -78,7 +80,7 @@ public class Ver_usuarios extends AppCompatActivity {
     private void mostrarUsuarios(){
         lv_usuarios = findViewById(R.id.lv_usuarios);
         usuarios = new ArrayList<String>();
-        //arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, usuarios) {
+        //Editar el tamaño de los items de la lista
             arrayAdapter = new ArrayAdapter<String>
                     (this, android.R.layout.simple_list_item_1, usuarios){
                 @Override

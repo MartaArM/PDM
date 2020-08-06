@@ -119,8 +119,6 @@ public class lugar extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                //i.putExtra("name", user_n);
-                //startActivity(i);
                 finish();
             }
         });

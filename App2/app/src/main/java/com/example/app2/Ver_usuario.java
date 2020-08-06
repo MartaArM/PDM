@@ -88,6 +88,7 @@ public class Ver_usuario extends AppCompatActivity {
         finish();
     }
 
+    // Ver veces que ha fichado un usuario
     public void ver_horas(View v) {
         Intent intent = new Intent(this, Ver_horas_usuario.class);
         intent.putExtra("name", user_n);
@@ -104,8 +105,6 @@ public class Ver_usuario extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                //i.putExtra("name", user_n);
-                //startActivity(i);
                 finish();
             }
         });

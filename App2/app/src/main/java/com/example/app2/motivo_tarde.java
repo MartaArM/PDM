@@ -19,8 +19,7 @@ import java.util.Date;
 
 public class motivo_tarde extends AppCompatActivity {
 
-    TextView t;
-    Intent i, i1;
+    Intent i;
     String user_n;
     AppDatabase db;
 
@@ -52,9 +51,10 @@ public class motivo_tarde extends AppCompatActivity {
                 motivo = "otros";
                 break;
         }
+
         i = getIntent();
-        i1 = new Intent(this, Opciones.class);
         user_n = i.getStringExtra("name");
+
         Usuario us = db.usuarioDao().getUsuarioNombreUsuario(user_n);
         Horas h = new Horas(Long.toString(us.getId()), dia_actual(), hora_actual(), motivo,
                 "fichaje_entrada", "");
@@ -117,8 +117,6 @@ public class motivo_tarde extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                //i.putExtra("name", user_n);
-                //startActivity(i1);
                 finish();
             }
         });

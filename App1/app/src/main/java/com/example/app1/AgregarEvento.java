@@ -49,7 +49,7 @@ public class AgregarEvento extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        fecha_fin = crear_fecha_ok();
+        fecha_fin = crear_fecha();
 
     }
 
@@ -77,6 +77,7 @@ public class AgregarEvento extends AppCompatActivity {
         fecha_v = fecha_v.substring(0, 1).toUpperCase() + fecha_v.substring(1);
         return fecha_v;
     }
+
     private String crear_fecha(){
         fecha = intent.getStringArrayListExtra("fecha");
         String dia = fecha.get(0);
@@ -96,26 +97,6 @@ public class AgregarEvento extends AppCompatActivity {
         return fecha;
     }
 
-    private String crear_fecha_ok(){
-        fecha = intent.getStringArrayListExtra("fecha");
-        String dia = fecha.get(0);
-        String mes = fecha.get(1);
-        Integer mes_i = Integer.parseInt(mes);
-        //mes_i+=1;
-
-        if (mes_i < 10) {
-            mes = "0" + mes_i.toString();
-        }
-        else {
-            mes = mes_i.toString();
-        }
-        String anio = fecha.get(2);
-        String fecha = dia + "/" + mes + "/" + anio;
-
-        return fecha;
-    }
-
-
     public void agregarEvento(View view) throws ParseException {
 
         et_titulo = findViewById(R.id.ettitulo);
@@ -130,8 +111,6 @@ public class AgregarEvento extends AppCompatActivity {
 
         db.eventoDao().aniadir(e);
 
-        /*Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);*/
         finish();
     }
 }

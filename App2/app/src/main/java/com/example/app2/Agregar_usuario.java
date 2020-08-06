@@ -42,7 +42,9 @@ public class Agregar_usuario extends AppCompatActivity {
         et_nombre = findViewById(R.id.et_nombre);
         et_hora_e = findViewById(R.id.et_hora_e);
         et_hora_s = findViewById(R.id.et_hora_s);
+
         String tipo = "";
+
         rg = findViewById(R.id.rg_opcion);
         int rb_selected = rg.getCheckedRadioButtonId();
 
@@ -109,8 +111,6 @@ public class Agregar_usuario extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                //i.putExtra("name", user_n);
-                //startActivity(i);
                 finish();
             }
         });

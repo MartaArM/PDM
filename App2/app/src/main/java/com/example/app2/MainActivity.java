@@ -44,8 +44,12 @@ public class MainActivity extends AppCompatActivity {
                 fallbackToDestructiveMigration().build();
         //db.horasDao().deleteAll();
 
+        Usuario u = new Usuario("admin", "123", "Marta", "08:00", "15:00", "admin");
+        db.usuarioDao().insert(u);
+
     }
 
+    // Compruebo si los datos del usuario son correctos. Si no, muestro mensaje de error.
     public void comprobarDatos(View view) {
         nombre_usuario = findViewById(R.id.etusuario);
         clave = findViewById(R.id.etclave);

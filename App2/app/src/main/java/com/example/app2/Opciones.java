@@ -42,6 +42,7 @@ public class Opciones extends AppCompatActivity {
                 AppDatabase.class, "database-name").allowMainThreadQueries().build();
 
         Usuario us = db.usuarioDao().getUsuarioNombreUsuario(user_n);
+        // Si el usuario no es admin, no muestro los botones de ajustes
         if (!us.getTipo().equals("admin")) {
             b_settings = findViewById(R.id.bajustes);
             iv_settings = findViewById(R.id.imageView8);
@@ -52,7 +53,7 @@ public class Opciones extends AppCompatActivity {
 
     }
 
-    // Botón salida
+    // Botón visitas
     public void visitas(View view) {
         Intent intent = new Intent(this, lugar.class);
         intent.putExtra("name", user_n);
